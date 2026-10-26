@@ -1,0 +1,93 @@
+.celebration-toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 1200;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  width: min(410px, calc(100vw - 32px));
+  padding: 19px;
+  background: #fffafd;
+  border: 1px solid #efcddd;
+  border-radius: 18px;
+  box-shadow: 0 18px 60px rgba(88, 54, 80, 0.19);
+  animation: celebration-appear 250ms ease-out;
+}
+.celebration-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #f8dfeb;
+  color: #b97296;
+}
+.celebration-copy { flex: 1; min-width: 0; }
+.celebration-copy small,
+.celebration-throwback small {
+  display: block;
+  color: #bd8ea6;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+.celebration-copy strong,
+.celebration-throwback strong {
+  display: block;
+  margin-top: 6px;
+  font-family: "Fraunces", serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: #684c61;
+}
+.celebration-copy p {
+  margin: 8px 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #876e80;
+}
+.celebration-copy em {
+  display: block;
+  margin-top: 10px;
+  color: #ac678a;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+}
+.celebration-toast > button {
+  padding: 3px;
+  border: none;
+  background: transparent;
+  color: #bda6b5;
+}
+.celebration-throwback {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  padding: 17px 20px;
+  margin-bottom: 22px;
+  background: #fff6fa;
+  border: 1px solid #f1dce7;
+  border-radius: 16px;
+  color: #b57999;
+  text-align: left;
+}
+.celebration-throwback > span > span {
+  display: block;
+  margin-top: 7px;
+  color: #907789;
+  font-size: 12px;
+  line-height: 1.6;
+}
+@keyframes celebration-appear {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@media (max-width: 600px) {
+  .celebration-toast { left: 16px; right: 16px; bottom: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .celebration-toast { animation: none; }
+}

@@ -1,0 +1,333 @@
+/* Main card */
+
+.reminders {
+  margin-top: 22px;
+  padding: 27px;
+  min-height: 470px;
+  background: #fff;
+  border: 1px solid #f0e9e9;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(79, 54, 69, 0.027);
+}
+
+/* Heading */
+
+.reminders-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.reminders-heading-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  background: #fbe5ee;
+  color: #b77996;
+  border-radius: 13px;
+}
+
+.reminders-eyebrow {
+  color: #c59bac;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+  margin: 0 0 7px;
+}
+
+.reminders-heading h2 {
+  font-family: "Fraunces", serif;
+  color: #63485d;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+/* Add reminder */
+
+.new-reminder {
+  display: flex;
+  gap: 9px;
+  margin: 24px 0 13px;
+}
+
+.new-reminder input {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  background: #fffafb;
+  border: 1px solid #eee2e7;
+  border-radius: 9px;
+  color: #705a6e;
+  font-size: 12px;
+  outline-color: #dca2ba;
+}
+
+.new-reminder button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 13px;
+  background: #f5d9e2;
+  color: #a55779;
+  border: none;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.new-reminder button:hover {
+  background: #efc5d4;
+}
+
+.new-reminder button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancel-reminder-edit {
+  color: #b37c95;
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+  font-size: 10px;
+  padding: 0;
+  margin: -1px 0 12px;
+}
+
+/* Optional date */
+
+.optional-date {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: #aa99a5;
+  font-size: 10px;
+}
+
+.optional-date input {
+  padding: 5px 9px;
+  background: #fff;
+  border: 1px solid #f0e6e8;
+  border-radius: 8px;
+  color: #977d8d;
+  font-size: 10px;
+}
+
+/* Divider */
+
+.reminder-divider {
+  border-top: 1px solid #f5eded;
+  margin: 25px 0 20px;
+}
+
+/* Reminder list */
+
+.reminder-list {
+  margin-top: 12px;
+}
+
+.reminder-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid #f7eff1;
+}
+
+.reminder-row:last-child {
+  border-bottom: none;
+}
+
+/* Circular checkbox */
+
+.reminder-circle {
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  background: white;
+  border: 1.5px solid #d8b8c8;
+  border-radius: 50%;
+  color: white;
+}
+
+.reminder-circle:hover {
+  border-color: #aa6989;
+}
+
+.reminder-circle.checked {
+  background: #c88fab;
+  border-color: #c88fab;
+}
+
+/* Reminder text */
+
+.reminder-text {
+  flex: 1;
+  min-width: 0;
+  color: #6f5b6d;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.reminder-text small {
+  display: block;
+  margin-top: 3px;
+  color: #b59aa9;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: pre-wrap;
+}
+
+/* Pencil and X */
+
+.reminder-icon-button {
+  display: grid;
+  place-items: center;
+  padding: 3px;
+  background: transparent;
+  border: none;
+  color: #bca6b4;
+}
+
+.reminder-icon-button:hover {
+  color: #a55779;
+}
+
+/* Handled reminders */
+
+.done-reminders .reminder-text {
+  color: #a89ba5;
+  text-decoration: line-through;
+}
+
+/* Empty state */
+
+.reminders-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 46px 18px;
+  text-align: center;
+}
+
+.reminders-empty-heart {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 18px;
+  background: #fff0f4;
+  color: #cc8ca6;
+  border-radius: 17px;
+  transform: rotate(-7deg);
+  font-family: "Fraunces", serif;
+  font-size: 34px;
+}
+
+.reminders-empty strong {
+  font-family: "Fraunces", serif;
+  color: #9a7389;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.reminders-empty p {
+  max-width: 245px;
+  margin: 7px 0 0;
+  color: #ad9aa6;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .reminders {
+    padding: 20px 15px;
+  }
+
+  .new-reminder {
+    gap: 7px;
+  }
+
+  .new-reminder button {
+    padding: 10px;
+  }
+}
+
+/* Reminder cards */
+
+.reminder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.reminder-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 17px;
+  background: #fffbfc;
+  border: 1px solid #f5eaef;
+  border-radius: 12px;
+}
+
+/* Square checkbox */
+
+.reminder-circle {
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  border: 1.5px solid #e4b6c9;
+  border-radius: 7px;
+  background: white;
+  color: white;
+}
+
+.reminder-circle.checked {
+  background: #cf91ad;
+  border-color: #cf91ad;
+}
+
+/* Reminder text */
+
+.reminder-text {
+  flex: 1;
+  color: #72586a;
+  font-size: 13px;
+}
+
+/* Edit and delete icons */
+
+.reminder-icon-button {
+  padding: 5px;
+  border: none;
+  background: transparent;
+  color: #bca6b4;
+}
+
+.reminder-icon-button:hover {
+  color: #a55779;
+}
+
+/* Completed reminders */
+
+.done-reminders .reminder-row {
+  background: #fcf9fa;
+}

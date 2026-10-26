@@ -1,0 +1,558 @@
+.receipts {
+  margin-top: 22px;
+  padding: 26px;
+  background: white;
+  border: 1px solid #f0e9e9;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(79, 54, 69, 0.03);
+}
+
+/* Heading */
+
+.receipts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.receipts-eyebrow {
+  color: #c59bac;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+  margin: 0 0 7px;
+}
+
+.receipts-header h2 {
+  font-family: "Fraunces", serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #63485d;
+  margin: 0;
+}
+
+.receipts-flower {
+  color: #de9cb1;
+}
+
+/* Add button */
+
+.receipts-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 13px;
+  background: #f5d9e2;
+  color: #a55779;
+  border: none;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.receipts-add:hover {
+  background: #efc5d4;
+}
+
+/* Date navigation */
+
+.receipts-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 24px 0 7px;
+  padding: 9px;
+  background: #fdf8f8;
+  border-radius: 11px;
+}
+
+.receipts-navigation button {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: white;
+  color: #a87d90;
+}
+
+.receipts-navigation button:hover {
+  background: #f9ebef;
+}
+
+.receipts-navigation span {
+  min-width: 80px;
+  text-align: center;
+  color: #866678;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.receipts-navigation .receipts-today {
+  width: auto;
+  padding: 0 8px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* Empty state */
+
+.receipts-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 46px 18px;
+}
+
+.receipts-heart {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 18px;
+  background: #fff0f4;
+  color: #cc8ca6;
+  border-radius: 17px;
+  transform: rotate(-7deg);
+  font-family: "Fraunces", serif;
+  font-size: 34px;
+}
+
+.receipts-empty strong {
+  font-family: "Fraunces", serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #9a7389;
+}
+
+.receipts-empty p {
+  max-width: 245px;
+  margin: 7px 0 0;
+  color: #ad9aa6;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* Add form */
+
+.receipts-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.receipts-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #f0dce5;
+  border-radius: 9px;
+  outline-color: #dca2ba;
+}
+
+.receipts-form button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 9px;
+  background: #f5d9e2;
+  color: #a55779;
+  font-weight: 700;
+}
+
+/* Saved moments */
+
+.receipts-list {
+  margin-top: 16px;
+}
+
+.receipts-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 5px;
+  border-bottom: 1px solid #f6f0f0;
+  color: #665363;
+  font-size: 13px;
+}
+
+.receipts-entry:last-child {
+  border-bottom: none;
+}
+
+.receipts-entry button {
+  border: none;
+  background: transparent;
+  color: #c1b3bd;
+}
+
+.receipts-entry button:hover {
+  color: #a55779;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .receipts {
+    padding: 20px 15px;
+  }
+
+  .receipts-header {
+    flex-wrap: wrap;
+  }
+
+  .receipts-header h2 {
+    font-size: 20px;
+  }
+}
+
+/* ============================
+   LOG A LITTLE MOMENT POPUP
+   ============================ */
+
+.hgo-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(48, 30, 45, 0.45);
+  backdrop-filter: blur(5px);
+}
+
+.hgo-modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 28px;
+  background: #fffdfd;
+  border: 1px solid #f2e6ec;
+  border-radius: 22px;
+  box-shadow: 0 20px 70px rgba(60, 40, 60, 0.15);
+}
+
+/* Popup heading */
+
+.hgo-modal-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.hgo-modal-heading h2 {
+  font-family: "Fraunces", serif;
+  color: #63485d;
+  font-size: 25px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.hgo-modal-heading h2 span {
+  color: #d996b0;
+}
+
+.hgo-icon-button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 9px;
+  background: #fcf3f7;
+  color: #a77790;
+}
+
+/* Search */
+
+.hgo-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  border: 1px solid #f0dfe7;
+  border-radius: 12px;
+  color: #b58ca1;
+}
+
+.hgo-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #63485d;
+}
+
+/* Activity choices */
+
+.hgo-activity-list {
+  max-height: 350px;
+  overflow-y: auto;
+  border: 1px solid #f5edf1;
+  border-radius: 12px;
+}
+
+.hgo-activity-option {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f8f1f4;
+}
+
+.hgo-activity-option:last-child {
+  border-bottom: none;
+}
+
+.hgo-select-activity {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 11px 13px;
+  border: none;
+  background: transparent;
+  color: #72586a;
+  text-align: left;
+  font-size: 12px;
+}
+
+.hgo-select-activity:hover {
+  background: #fff3f7;
+}
+
+.hgo-select-activity > span:nth-child(2) {
+  flex: 1;
+}
+
+.hgo-select-activity svg {
+  color: #cb95ab;
+}
+
+.hgo-activity-emoji {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  background: #fdf0f5;
+  font-size: 19px;
+}
+
+.hgo-custom-actions {
+  display: flex;
+}
+
+.hgo-custom-actions button {
+  padding: 7px;
+  border: none;
+  background: transparent;
+  color: #b79aaa;
+}
+
+.hgo-custom-actions button:hover {
+  color: #a55779;
+}
+
+.hgo-no-results {
+  text-align: center;
+  color: #ad9aa6;
+  font-size: 12px;
+  padding: 20px;
+}
+
+.hgo-create-link {
+  margin-top: 18px;
+  border: none;
+  background: transparent;
+  color: #b56b8e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hgo-create-link:hover {
+  text-decoration: underline;
+}
+
+/* Selected activity */
+
+.hgo-chosen {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: #fdf3f7;
+}
+
+.hgo-chosen span {
+  font-size: 25px;
+}
+
+.hgo-chosen strong {
+  flex: 1;
+  color: #79576b;
+  font-size: 13px;
+}
+
+.hgo-chosen button {
+  border: none;
+  background: transparent;
+  color: #b56b8e;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Form fields */
+
+.hgo-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.hgo-fields label,
+.hgo-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #775f70;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hgo-label {
+  margin-bottom: 18px;
+}
+
+.hgo-fields small,
+.hgo-label small {
+  display: inline;
+  color: #b7a4af;
+  font-weight: 400;
+}
+
+.hgo-fields input,
+.hgo-fields select,
+.hgo-label input,
+.hgo-label textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #f0dfe7;
+  border-radius: 10px;
+  background: white;
+  color: #63485d;
+  outline-color: #dca2ba;
+  font: inherit;
+  font-weight: 400;
+}
+
+.hgo-label textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* Save / Cancel buttons */
+
+.hgo-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.hgo-modal-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 15px;
+  border: none;
+  border-radius: 10px;
+  background: #f8f3f5;
+  color: #8a7280;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hgo-modal-actions .hgo-primary {
+  background: #edcad9;
+  color: #92516f;
+}
+
+.hgo-primary:hover {
+  background: #e9b8cd;
+}
+
+.hgo-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Logged receipt details */
+
+.hgo-entry-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.hgo-entry-emoji {
+  font-size: 22px;
+}
+
+.hgo-entry-content strong {
+  display: block;
+  color: #72586a;
+  font-size: 13px;
+}
+
+.hgo-entry-content small {
+  display: block;
+  margin-top: 5px;
+  color: #ba8fa3;
+  font-size: 11px;
+}
+
+.hgo-entry-content p {
+  margin: 8px 0 0;
+  color: #a08c99;
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.hgo-entry-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .hgo-modal {
+    padding: 20px;
+    max-height: 90vh;
+  }
+
+  .hgo-fields {
+    grid-template-columns: 1fr;
+  }
+}

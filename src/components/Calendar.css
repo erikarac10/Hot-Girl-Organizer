@@ -1,0 +1,262 @@
+/* Homepage */
+
+.dashboard {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 45px 35px;
+}
+
+.dashboard > header {
+  margin-bottom: 35px;
+}
+
+.dashboard > header h1 {
+  font-family: "Fraunces", serif;
+  font-size: 44px;
+  font-weight: 600;
+  color: #66465e;
+  margin: 0 0 10px;
+}
+
+.dashboard > header p {
+  font-size: 13px;
+  color: #ac9aa5;
+}
+
+/* Calendar card */
+
+.calendar {
+  background: white;
+  border: 1px solid #f0e9e9;
+  border-radius: 18px;
+  padding: 26px 25px 20px;
+  box-shadow: 0 8px 32px rgba(79, 54, 69, 0.03);
+}
+
+/* Calendar heading */
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 23px;
+}
+
+.calendar-eyebrow {
+  color: #c59bac;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+  margin: 0 0 7px;
+}
+
+.calendar-header h2 {
+  font-family: "Fraunces", serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #63485d;
+  margin: 0;
+}
+
+/* Month navigation */
+
+.calendar-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendar-navigation button {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  color: #a87d90;
+}
+
+.calendar-navigation button:hover {
+  background: #f9ebef;
+}
+
+.calendar-navigation .calendar-today-button {
+  width: auto;
+  padding: 0 12px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Weekday labels */
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.calendar-weekdays span {
+  font-size: 9px;
+  letter-spacing: 1px;
+  font-weight: 800;
+  color: #baa6b3;
+}
+
+/* Calendar grid */
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+}
+
+/* Date squares */
+
+.calendar-day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+
+  min-height: 82px;
+  padding: 9px 6px 7px;
+
+  background: #fffbfb;
+  border: 1px solid #f8f0f1;
+  border-radius: 10px;
+
+  color: #8c7385;
+  text-align: left;
+}
+
+.calendar-day:hover {
+  background: #fff1f5;
+}
+
+/* Dates from neighbouring months */
+
+.calendar-day.outside {
+  opacity: 0.38;
+}
+
+/* Selected date */
+
+.calendar-day.selected {
+  background: #f8e4ed;
+  border-color: #e7b4c7;
+}
+
+/* Date number */
+
+.calendar-day-number {
+  display: grid;
+  place-items: center;
+
+  min-width: 22px;
+  height: 22px;
+
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* Today's date number */
+
+.calendar-day.current .calendar-day-number {
+  background: #b97596;
+  color: white;
+}
+
+/* Logged activity badge */
+
+.calendar-moments {
+  padding: 4px 5px;
+  border-radius: 6px;
+
+  background: #f9e2ea;
+  color: #a56585;
+
+  font-size: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.calendar-day.selected .calendar-moments {
+  background: #fff7f9;
+}
+
+/* Legend */
+
+.calendar-legend {
+  display: flex;
+  gap: 15px;
+  padding-top: 17px;
+
+  color: #a994a2;
+  font-size: 10px;
+}
+
+.calendar-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-legend i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e6adc2;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 25px 12px;
+  }
+
+  .calendar {
+    padding: 18px 13px;
+  }
+
+  .calendar-header {
+    flex-wrap: wrap;
+  }
+
+  .calendar-header h2 {
+    font-size: 22px;
+  }
+
+  .calendar-grid {
+    gap: 3px;
+  }
+
+  .calendar-day {
+    min-height: 64px;
+    padding: 6px 2px;
+    align-items: center;
+  }
+
+  .calendar-day-number {
+    font-size: 11px;
+  }
+
+  .calendar-moments {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border-radius: 50%;
+    background: #e9abc3;
+
+    /* Show a dot instead of text on phones */
+    font-size: 0;
+    overflow: hidden;
+  }
+}
