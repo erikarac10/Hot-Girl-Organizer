@@ -103,7 +103,7 @@ function Calendar({ selectedDate, onDateSelect }: CalendarProps) {
       <div className="calendar-header">
         <div>
           <p className="calendar-eyebrow">
-            LITTLE MOMENTS THROUGH TIME
+            larping timeline
           </p>
 
           <h2>
@@ -169,7 +169,7 @@ function Calendar({ selectedDate, onDateSelect }: CalendarProps) {
 
               {count > 0 && (
                 <span className="calendar-moments">
-                  {count} {count === 1 ? "moment" : "moments"}
+                  {count} {count === 1 ? "activity" : "activities"}
                 </span>
               )}
             </button>
@@ -180,7 +180,7 @@ function Calendar({ selectedDate, onDateSelect }: CalendarProps) {
       <div className="calendar-legend">
         <span>
           <i />
-          Logged activity
+          Logged aura activity
         </span>
       </div>
 

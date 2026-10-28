@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Heart, X } from "lucide-react";
-import "./Moodboard.css";
+import "./MoodBoard.css";
 
 type Mood =
   | "amazing"
@@ -29,12 +29,12 @@ const moods: {
   label: string;
   symbol: string;
 }[] = [
-  { value: "amazing", label: "Amazing", symbol: "✦" },
-  { value: "good", label: "Good", symbol: "♡" },
-  { value: "calm", label: "Calm", symbol: "☁" },
-  { value: "meh", label: "Meh", symbol: "⋯" },
-  { value: "anxious", label: "Anxious", symbol: "⚡" },
-  { value: "rough", label: "Rough", symbol: "☂" }
+  { value: "amazing", label: "mogging", symbol: "✦" },
+  { value: "good", label: "absolutely based", symbol: "♡" },
+  { value: "calm", label: "unbothered queen", symbol: "☁" },
+  { value: "meh", label: "mid", symbol: "⋯" },
+  { value: "anxious", label: "negative aura", symbol: "⚡" },
+  { value: "rough", label: "chopped asf", symbol: "☂" }
 ];
 
 const energyLevels: {
@@ -45,12 +45,12 @@ const energyLevels: {
   {
     value: "low",
     label: "Low",
-    description: "Running on fumes"
+    description: "Cooked"
   },
   {
     value: "medium",
     label: "Medium",
-    description: "We exist"
+    description: "6-7"
   },
   {
     value: "high",
@@ -145,16 +145,13 @@ function Moodboard({ selectedDate }: MoodboardProps) {
 
       <div className="moodboard-header">
         <div>
-          <p className="moodboard-eyebrow">
-            A LITTLE CHECK-IN
-          </p>
 
           <h2>
             Vibe Check <span>♡</span>
           </h2>
 
           <p className="moodboard-description">
-            How's the main character doing?
+            fr how we doin
           </p>
         </div>
 
@@ -163,28 +160,9 @@ function Moodboard({ selectedDate }: MoodboardProps) {
         </div>
       </div>
 
-      <div className="moodboard-date">
-        <span>{dateLabel}</span>
-
-        {hasEntry && (
-          <button
-            type="button"
-            className="moodboard-clear"
-            onClick={clearDay}
-          >
-            <X size={13} />
-            Clear day
-          </button>
-        )}
-      </div>
-
       {/* Mood */}
 
       <div className="moodboard-section">
-        <div className="moodboard-section-heading">
-          <h3>Today's vibe</h3>
-          <span>OPTIONAL</span>
-        </div>
 
         <div className="moodboard-moods">
           {moods.map(mood => (
@@ -213,7 +191,24 @@ function Moodboard({ selectedDate }: MoodboardProps) {
 
       <div className="moodboard-section">
         <div className="moodboard-section-heading">
-          <h3>Energy levels</h3>
+          <h3 className="battery-heading">
+            Bat
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="2" y="7" width="18" height="10" rx="2" />
+              <path d="M22 11v2" />
+              <path d="M6 10h8v4H6z" fill="currentColor" stroke="none" />
+            </svg>
+          </h3>
           <span>OPTIONAL</span>
         </div>
 
@@ -240,14 +235,14 @@ function Moodboard({ selectedDate }: MoodboardProps) {
 
       <div className="moodboard-section">
         <div className="moodboard-section-heading">
-          <h3>Anything on your mind?</h3>
+          <h3>Trauma Dump</h3>
           <span>OPTIONAL</span>
         </div>
 
         <textarea
           className="moodboard-note"
           rows={3}
-          placeholder="A thought, a feeling, a tiny piece of lore..."
+          placeholder="say your piece, diva"
           value={entry.note ?? ""}
           onChange={event =>
             updateEntry({ note: event.target.value })
@@ -257,8 +252,8 @@ function Moodboard({ selectedDate }: MoodboardProps) {
 
       <p className="moodboard-footer">
         {hasEntry
-          ? "Saved to your little corner of the internet ♡"
-          : "No need to explain yourself. Just vibes."}
+          ? "certified yapper ♡"
+          : "chat i'm going non-verbal"}
       </p>
 
     </section>

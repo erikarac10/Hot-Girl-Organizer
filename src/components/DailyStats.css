@@ -1,69 +1,174 @@
+/* ========================================
+   DAILY STATS — SIDEBAR LAYOUT
+======================================== */
+
 .daily-stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 15px;
-  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
-/* Individual cards */
+
+/* ========================================
+   SIDEBAR BRANDING
+======================================== */
+
+.sidebar-brand {
+  text-align: center;
+
+  padding: 20px 10px 22px;
+  margin-bottom: 12px;
+
+  border-bottom: 1px solid #f3dce8;
+}
+
+.brand-flower {
+  display: block;
+
+  font-size: 32px;
+  line-height: 1;
+
+  color: #e6a3c5;
+}
+
+.sidebar-brand h1 {
+  margin: 12px 0 8px;
+
+  font-family: "Fraunces", serif;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  color: #735a76;
+}
+
+.sidebar-brand p {
+  margin: 0;
+
+  font-size: 11px;
+  line-height: 1.5;
+
+  color: #b59aaa;
+}
+
+.sidebar-date {
+  display: block;
+
+  margin-top: 16px;
+
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  color: #a888a0;
+}
+
+
+/* ========================================
+   STAT CARDS — HORIZONTAL LAYOUT
+======================================== */
 
 .stat-card {
-  padding: 22px;
-  border: 1px solid #f0e9e9;
-  border-radius: 18px;
-  transition: transform 0.2s;
+  display: grid;
+
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  grid-template-areas: "icon label value";
+
+  align-items: center;
+  column-gap: 10px;
+
+  min-height: 48px;
+  padding: 8px 12px;
+
+  border: 1px solid rgba(180, 150, 170, 0.12);
+  border-radius: 12px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
+
+  box-shadow: 0 4px 12px rgba(140, 100, 130, 0.08);
 }
 
-/* Heading and icon */
 
-.stat-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.stat-top > span {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.2px;
-  color: #9c7d91;
-}
+/* ========================================
+   STAT ICONS
+======================================== */
 
 .stat-icon {
-  display: grid;
-  place-items: center;
-  width: 37px;
-  height: 37px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.7);
+  grid-area: icon;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.65);
   color: #a66e8a;
+
+  flex-shrink: 0;
 }
 
-/* Numbers */
+.stat-icon svg {
+  width: 17px;
+  height: 17px;
 
-.stat-number {
-  display: block;
-  margin-top: 15px;
-  font-family: "Fraunces", serif;
-  font-size: 35px;
-  font-weight: 600;
-  color: #63485d;
+  stroke-width: 2;
 }
 
-/* Description */
+
+/* ========================================
+   STAT DESCRIPTIONS
+======================================== */
 
 .stat-subtitle {
-  margin: 5px 0 0;
+  grid-area: label;
+
+  margin: 0;
+
   font-size: 11px;
-  color: #a38d9b;
+  font-weight: 600;
+  line-height: 1.35;
+
+  color: #8f7585;
 }
 
-/* Pastel colours */
+
+/* ========================================
+   STAT VALUES
+======================================== */
+
+.stat-number {
+  grid-area: value;
+
+  margin: 0;
+
+  font-family: "Fraunces", serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.1;
+
+  color: #63485d;
+
+  text-align: right;
+  white-space: nowrap;
+}
+
+
+/* ========================================
+   PASTEL CARD COLOURS
+======================================== */
 
 .stat-card.pink {
   background: #fcebf2;
@@ -93,32 +198,44 @@
   background: #eef8f2;
 }
 
-/* Responsive */
 
-@media (max-width: 800px) {
-  .daily-stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
+/* ========================================
+   RESPONSIVE — SMALL SCREENS
+======================================== */
 
 @media (max-width: 450px) {
+
   .daily-stats {
-    gap: 10px;
+    gap: 6px;
   }
 
   .stat-card {
-    padding: 15px;
+    min-height: 44px;
+    padding: 7px 10px;
+
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+    column-gap: 8px;
   }
 
-  .stat-number {
-    font-size: 29px;
+  .stat-icon {
+    width: 28px;
+    height: 28px;
   }
 
-  .stat-top > span {
-    font-size: 9px;
+  .stat-icon svg {
+    width: 15px;
+    height: 15px;
   }
 
   .stat-subtitle {
     font-size: 10px;
+  }
+
+  .stat-number {
+    font-size: 18px;
+  }
+
+  .sidebar-brand h1 {
+    font-size: 20px;
   }
 }

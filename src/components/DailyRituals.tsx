@@ -111,10 +111,10 @@ function DailyRituals({ selectedDate }: DailyRitualsProps) {
       <div className="rituals-header">
         <div>
           <h2>
-            Daily rituals <span>♡</span>
+            Daily RoutineMaxxing <span>♡</span>
           </h2>
 
-          <p>Small habits, happy days</p>
+          <p>mewing maintenance</p>
         </div>
 
         <div className="rituals-header-icon">
@@ -186,7 +186,7 @@ function DailyRituals({ selectedDate }: DailyRitualsProps) {
           <input
             className="ritual-name-input"
             autoFocus
-            placeholder="New little ritual..."
+            placeholder="New glazing ritual..."
             value={title}
             onChange={event => setTitle(event.target.value)}
           />
@@ -208,7 +208,7 @@ function DailyRituals({ selectedDate }: DailyRitualsProps) {
           onClick={() => setAdding(true)}
         >
           <Plus size={17} />
-          Add a new habit
+          New Glazing Ritual
         </button>
       )}
 

@@ -294,18 +294,18 @@ useEffect(() => {
       <div className="receipts-header">
         <div>
           <p className="receipts-eyebrow">
-            PROOF YOU LIVED YOUR LIFE
+            life lore just dropped
           </p>
 
           <h2>
-            Your day in receipts
+            Aura Farming Activities
             <span className="receipts-flower"> ✿</span>
           </h2>
         </div>
 
         <button className="receipts-add" onClick={openPicker}>
           <Plus size={16} />
-          Add a moment
+          Add Aura Gain
         </button>
       </div>
 
@@ -343,11 +343,10 @@ useEffect(() => {
         <div className="receipts-empty">
           <div className="receipts-heart">♡</div>
 
-          <strong>Nothing logged here yet</strong>
+          <strong>zero rizz detected</strong>
 
           <p>
-            No pressure. When you feel like recording a moment,
-            it'll live here.
+            prey mentality
           </p>
         </div>
       ) : (
@@ -412,18 +411,15 @@ useEffect(() => {
 
             <div className="hgo-modal-heading">
               <div>
-                <p className="receipts-eyebrow">
-                  A LITTLE SOMETHING FOR THE ARCHIVES
-                </p>
 
                 <h2>
                   {screen === "activity"
                     ? activityEditId
                       ? "Edit saved activity"
-                      : "Create a new activity"
+                      : "New Activity Just Dropped"
                     : editingId
-                      ? "Edit this moment"
-                      : "Log a little moment"}
+                      ? "Edit Aura"
+                      : "Add Aura Gain"}
                   <span> ✿</span>
                 </h2>
               </div>
@@ -446,7 +442,7 @@ useEffect(() => {
 
                   <input
                     autoFocus
-                    placeholder="What did you do?"
+                    placeholder="what were we farming?"
                     value={search}
                     onChange={event => setSearch(event.target.value)}
                   />
@@ -501,7 +497,7 @@ useEffect(() => {
                   className="hgo-create-link"
                   onClick={() => openActivityEditor()}
                 >
-                  + Create a new activity
+                  + New Aura Farming Method
                 </button>
               </>
             )}
@@ -543,11 +539,11 @@ useEffect(() => {
                 </div>
 
                 <label className="hgo-label">
-                  A little note <small>(optional)</small>
+                  Note <small>(optional)</small>
 
                   <textarea
                     rows={4}
-                    placeholder="Anything you want to remember?"
+                    placeholder="Closing TED Talk"
                     value={note}
                     onChange={event => setNote(event.target.value)}
                   />
@@ -560,7 +556,7 @@ useEffect(() => {
 
                   <button className="hgo-primary" onClick={saveMoment}>
                     <Check size={16} />
-                    {editingId ? "Save changes" : "Save this moment"}
+                    {editingId ? "Save" : "Save"}
                   </button>
                 </div>
               </>
@@ -575,7 +571,7 @@ useEffect(() => {
 
                   <input
                     autoFocus
-                    placeholder="e.g. Cleaned the fridge"
+                    placeholder="e.g. 69-step skincare routine"
                     value={name}
                     onChange={event => setName(event.target.value)}
                   />

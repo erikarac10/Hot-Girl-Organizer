@@ -224,10 +224,10 @@ function Reminders() {
 
         <div>
           <p className="reminders-eyebrow">
-            WRITE IT DOWN, LET IT GO
+            working memory outsourcing
           </p>
 
-          <h2>Your reminders</h2>
+          <h2>Remembermaxxing</h2>
         </div>
       </div>
 
@@ -241,7 +241,7 @@ function Reminders() {
         }}
       >
         <input
-          placeholder="e.g. Reply to landlord email"
+          placeholder="e.g. schedule next crashout"
           value={reminderText}
           onChange={(event) => setReminderText(event.target.value)}
           aria-label="New reminder"
@@ -252,7 +252,7 @@ function Reminders() {
           disabled={!reminderText.trim()}
         >
           <Plus size={17} />
-          {editingId ? "Save" : "Add"}
+          {editingId ? "Save" : "Lock In"}
         </button>
       </form>
 
@@ -265,25 +265,11 @@ function Reminders() {
         </button>
       )}
 
-      {/* Optional date */}
-
-      <label className="optional-date">
-        Optional date (only if you want one)
-
-        <input
-          type="date"
-          value={reminderDate}
-          onChange={(event) =>
-            setReminderDate(event.target.value)
-          }
-        />
-      </label>
+      {}
 
       <div className="reminder-divider" />
 
       {/* Pending reminders */}
-
-      <p className="reminders-eyebrow">ON YOUR MIND</p>
 
       {pending.length > 0 ? (
         <div className="reminder-list">
@@ -293,9 +279,9 @@ function Reminders() {
         <div className="reminders-empty">
           <div className="reminders-empty-heart">♡</div>
 
-          <strong>Nothing to remember right now</strong>
+          <strong>chat we might be free</strong>
 
-          <p>Sounds like a pretty peaceful place to be.</p>
+          <p>we are so back (temporarily)</p>
         </div>
       )}
 
@@ -306,7 +292,7 @@ function Reminders() {
           <div className="reminder-divider" />
 
           <p className="reminders-eyebrow">
-            TAKEN CARE OF
+            Handled, Diva
           </p>
 
           <div className="reminder-list done-reminders">

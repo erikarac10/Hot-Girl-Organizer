@@ -724,3 +724,265 @@ select {
     height: 32px;
   }
 }
+
+/* =============================================
+   ONE-SCREEN DASHBOARD LAYOUT
+   Paste at the END of src/index.css
+   ============================================= */
+
+/* Organize existing cards into three rows. */
+#root .hgo-shell .hgo-page > .dashboard.hgo-screen-grid {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 12px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 14px 20px 18px;
+  min-width: 0;
+}
+
+.hgo-screen-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.hgo-row-bottom {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+}
+
+.hgo-side-stack {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 12px;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Remove old vertical margins: Grid now owns the spacing. */
+.hgo-screen-grid .hgo-screen-row > section,
+.hgo-screen-grid .hgo-side-stack > section {
+  min-width: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.hgo-screen-grid .reminders {
+  min-height: 0;
+}
+
+/* Compact the extra spacing INSIDE the cards, without changing colors. */
+.hgo-screen-grid .daily-rituals,
+.hgo-screen-grid .reminders,
+.hgo-screen-grid .receipts,
+.hgo-screen-grid .weekly-flow,
+.hgo-screen-grid .last-done {
+  padding: 16px;
+}
+
+.hgo-screen-grid .rituals-header {
+  margin-bottom: 10px;
+}
+
+.hgo-screen-grid .ritual-row {
+  padding: 8px 10px;
+}
+
+.hgo-screen-grid .ritual-emoji {
+  width: 30px;
+  height: 30px;
+}
+
+.hgo-screen-grid .rituals-add,
+.hgo-screen-grid .rituals-form {
+  margin-top: 10px;
+}
+
+.hgo-screen-grid .new-reminder {
+  margin: 10px 0;
+}
+
+.hgo-screen-grid .reminder-divider {
+  margin: 12px 0;
+}
+
+.hgo-screen-grid .reminder-row {
+  padding: 9px 11px;
+}
+
+.hgo-screen-grid .reminder-list {
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.hgo-screen-grid .reminders-empty {
+  padding: 12px 8px;
+}
+
+/* Things I Did Today */
+.hgo-screen-grid .receipts-navigation {
+  margin: 11px 0 7px;
+}
+
+.hgo-screen-grid .receipts-empty {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+/* Weekly Flow */
+.hgo-screen-grid .weekly-flow-navigation {
+  margin-top: 10px;
+}
+
+.hgo-screen-grid .weekly-flow-chart {
+  gap: 6px;
+  padding: 10px 2px 0;
+}
+
+.hgo-screen-grid .weekly-flow-track {
+  height: clamp(55px, 8vh, 92px);
+}
+
+.hgo-screen-grid .weekly-flow-day-label {
+  margin-top: 5px;
+}
+
+.hgo-screen-grid .weekly-flow-footer {
+  gap: 7px;
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+/* When Did I Last */
+.hgo-screen-grid .last-done-search {
+  margin-top: 10px;
+}
+
+.hgo-screen-grid .last-done-results {
+  padding-top: 5px;
+}
+
+.hgo-screen-grid .last-done-result {
+  padding: 5px 0;
+}
+
+/* Large desktop: no MAIN PAGE scrolling.
+   Individual cards scroll if the user adds lots of entries. */
+@media (min-width: 1101px) and (min-height: 780px) {
+  #root .hgo-shell {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    align-items: stretch;
+  }
+
+  #root .hgo-shell .hgo-page {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  #root .hgo-shell .hgo-page > .hgo-topbar {
+    flex: 0 0 76px;
+  }
+
+  #root .hgo-shell .hgo-page > .dashboard.hgo-screen-grid {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    grid-template-rows:
+      minmax(0, 0.9fr)
+      minmax(0, 1.65fr)
+      minmax(0, 1.65fr);
+  }
+
+  .hgo-screen-grid .hgo-screen-row > section,
+  .hgo-screen-grid .hgo-side-stack > section {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #efdbe5 transparent;
+  }
+
+  .hgo-screen-grid .hgo-side-stack {
+    grid-template-rows: minmax(0, 1.28fr) minmax(0, 0.95fr);
+  }
+
+}
+
+/* Short windows and tablets can scroll normally instead of hiding content. */
+@media (max-width: 760px) {
+  #root .hgo-shell .hgo-page > .dashboard.hgo-screen-grid {
+    padding: 14px 12px 36px;
+    grid-template-rows: auto;
+  }
+
+  .hgo-screen-row,
+  .hgo-row-bottom {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hgo-side-stack {
+    grid-template-rows: auto;
+  }
+
+  .hgo-screen-grid .weekly-flow-track {
+    height: 110px;
+  }
+}
+
+/* =============================================
+   CALENDAR — SIZE CONTROL
+   Edit ONLY these two values to resize the card.
+   Calendar.css automatically fits the contents.
+============================================= */
+
+#root .hgo-shell .hgo-page .hgo-screen-grid .calendar {
+  --calendar-width: 480px;   /* Try 420px, 500px, 100% */
+  --calendar-height: 340px;  /* Try 300px, 380px, 420px */
+
+  width: min(100%, var(--calendar-width));
+  height: var(--calendar-height);
+
+  /* Prevent the dashboard's full-height row rules from stretching it. */
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: none;
+  justify-self: start;
+  align-self: start;
+  overflow: hidden;
+}
+
+/* =============================================
+   VIBE CHECK (MOODBOARD) — SIZE CONTROL
+   Edit ONLY width and height here.
+   MoodBoard.css scales the contents to the card.
+============================================= */
+
+#root .hgo-shell .hgo-page .hgo-screen-grid .moodboard {
+  --moodboard-width: 100%;    /* Try 420px, 480px, 100% */
+  --moodboard-height: 360px;  /* Try 300px, 400px, 500px */
+
+  width: min(100%, var(--moodboard-width));
+  height: var(--moodboard-height);
+
+  /* Override the full-height dashboard rules. */
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: none;
+  justify-self: start;
+  align-self: start;
+
+  /* Very small sizes remain usable rather than clipping controls. */
+  overflow-x: hidden;
+  overflow-y: auto;
+}

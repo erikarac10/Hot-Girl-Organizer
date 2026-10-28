@@ -182,73 +182,74 @@ function DailyStats({ selectedDate }: DailyStatsProps) {
       value: dayMoments.length,
       subtitle: "Things you logged",
       icon: <Heart size={20} />,
-      color: "pink"
+      color: "rose"
     },
     {
       title: "TIME WELL SPENT",
       value: formatTime(activeMinutes),
       subtitle: "Time spent moving",
       icon: <Clock3 size={20} />,
-      color: "lavender"
+      color: "peach"
     },
     {
       title: "AVERY LOVE",
       value: countCategory("Avery"),
       subtitle: "Little moments with Avery",
       icon: <PawPrint size={20} />,
-      color: "peach"
+      color: "mint"
     },
     {
       title: "HOT GIRL MAINTENANCE",
       value: countCategory("Self-care"),
       subtitle: "Ways you cared for yourself",
       icon: <Sparkles size={20} />,
-      color: "rose"
+      color: "blue"
     },
     {
       title: "DOMESTIC GODDESS",
       value: countCategory("Home"),
       subtitle: "Home-care moments",
       icon: <House size={20} />,
-      color: "blue"
+      color: "lavender"
     },
     {
       title: "MAIN CHARACTER MOMENTS",
       value: countCategory("Fun"),
       subtitle: "Fun things you did",
       icon: <Star size={20} />,
-      color: "yellow"
-    },
-    {
-      title: "BRAIN TABS CLOSED",
-      value: completedTodos,
-      subtitle: "To-dos you handled",
-      icon: <CheckCheck size={20} />,
-      color: "mint"
-    },
-    {
-        title: "TODAY'S VIBE",
-        value: moodLabel,
-        subtitle: energyLabel,
-        icon: <Smile size={20} />,
-        color: "lavender"
+      color: "pink"
     }
   ];
 
   return (
     <section className="daily-stats">
 
+      {/* Sidebar branding */}
+      <div className="sidebar-brand">
+        <span className="brand-flower">✿</span>
+
+        <h1>Hot Girl Organizer</h1>
+
+        <p>the horrors persist but so do i ♡</p>
+
+        <span className="sidebar-date">
+          {new Date().toLocaleDateString("en-CA", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </span>
+      </div>
+
+      {/* Daily statistics */}
+      {/* Daily statistics */}
       {stats.map(stat => (
         <div
           className={`stat-card ${stat.color}`}
-          key={stat.title}
+          key={stat.subtitle}
         >
-          <div className="stat-top">
-            <span>{stat.title}</span>
-
-            <div className="stat-icon">
-              {stat.icon}
-            </div>
+          <div className="stat-icon">
+            {stat.icon}
           </div>
 
           <strong className="stat-number">

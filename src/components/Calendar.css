@@ -1,78 +1,73 @@
-/* Homepage */
+/* ========================================
+   CALENDAR — SELF-ADJUSTING CONTENTS
+   Card width/height are controlled in index.css.
+   Styles below adapt to the available card size.
+======================================== */
 
-.dashboard {
-  max-width: 1150px;
-  margin: 0 auto;
-  padding: 45px 35px;
-}
-
-.dashboard > header {
-  margin-bottom: 35px;
-}
-
-.dashboard > header h1 {
-  font-family: "Fraunces", serif;
-  font-size: 44px;
-  font-weight: 600;
-  color: #66465e;
-  margin: 0 0 10px;
-}
-
-.dashboard > header p {
-  font-size: 13px;
-  color: #ac9aa5;
-}
-
-/* Calendar card */
-
+/* Calendar card: a fixed-size container with a flexible dates area. */
 .calendar {
-  background: white;
+  container-name: hgo-calendar;
+  container-type: size;
+
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 8px;
+
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 16px;
+
+  background: #fff;
   border: 1px solid #f0e9e9;
   border-radius: 18px;
-  padding: 26px 25px 20px;
   box-shadow: 0 8px 32px rgba(79, 54, 69, 0.03);
 }
 
-/* Calendar heading */
+/* ========================================
+   HEADER & MONTH NAVIGATION
+======================================== */
 
 .calendar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 23px;
+  gap: 8px;
+  min-width: 0;
+  padding: 0;
 }
 
 .calendar-eyebrow {
+  margin: 0 0 4px;
   color: #c59bac;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 1.7px;
-  margin: 0 0 7px;
+  letter-spacing: 1.2px;
 }
 
 .calendar-header h2 {
-  font-family: "Fraunces", serif;
-  font-size: 26px;
-  font-weight: 600;
-  color: #63485d;
   margin: 0;
+  color: #63485d;
+  font-family: "Fraunces", serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.15;
 }
-
-/* Month navigation */
 
 .calendar-navigation {
   display: flex;
   align-items: center;
-  gap: 8px;
+  flex-shrink: 0;
+  gap: 4px;
 }
 
 .calendar-navigation button {
   display: grid;
   place-items: center;
-  width: 29px;
+  width: 28px;
   height: 28px;
-  border: none;
+  padding: 0;
+  border: 0;
   border-radius: 8px;
   background: #fff;
   color: #a87d90;
@@ -84,52 +79,57 @@
 
 .calendar-navigation .calendar-today-button {
   width: auto;
-  padding: 0 12px;
-  font-size: 11px;
+  padding: 0 8px;
+  font-size: 10px;
   font-weight: 800;
 }
 
-/* Weekday labels */
+/* ========================================
+   WEEKDAYS & DATE GRID
+======================================== */
 
 .calendar-weekdays {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  margin-bottom: 10px;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
   text-align: center;
 }
 
 .calendar-weekdays span {
-  font-size: 9px;
-  letter-spacing: 1px;
-  font-weight: 800;
   color: #baa6b3;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
 }
 
-/* Calendar grid */
-
+/* The rows automatically divide up whatever height is left in the card. */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 5px;
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 4px;
+  min-width: 0;
+  min-height: 0;
 }
-
-/* Date squares */
 
 .calendar-day {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 7px;
+  justify-content: flex-start;
+  gap: 2px;
 
-  min-height: 82px;
-  padding: 9px 6px 7px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 4px;
 
   background: #fffbfb;
   border: 1px solid #f8f0f1;
-  border-radius: 10px;
-
+  border-radius: 8px;
   color: #8c7385;
   text-align: left;
 }
@@ -138,51 +138,41 @@
   background: #fff1f5;
 }
 
-/* Dates from neighbouring months */
-
 .calendar-day.outside {
   opacity: 0.38;
 }
-
-/* Selected date */
 
 .calendar-day.selected {
   background: #f8e4ed;
   border-color: #e7b4c7;
 }
 
-/* Date number */
-
 .calendar-day-number {
   display: grid;
   place-items: center;
-
-  min-width: 22px;
-  height: 22px;
-
-  border-radius: 7px;
-  font-size: 12px;
+  flex-shrink: 0;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  font-size: 11px;
   font-weight: 800;
 }
 
-/* Today's date number */
-
 .calendar-day.current .calendar-day-number {
   background: #b97596;
-  color: white;
+  color: #fff;
 }
 
-/* Logged activity badge */
-
 .calendar-moments {
-  padding: 4px 5px;
-  border-radius: 6px;
-
+  max-width: 100%;
+  overflow: hidden;
+  padding: 2px 4px;
+  border-radius: 5px;
   background: #f9e2ea;
   color: #a56585;
-
   font-size: 8px;
   font-weight: 700;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -190,73 +180,80 @@
   background: #fff7f9;
 }
 
-/* Legend */
+/* ========================================
+   LEGEND
+======================================== */
 
 .calendar-legend {
   display: flex;
-  gap: 15px;
-  padding-top: 17px;
-
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 0;
   color: #a994a2;
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .calendar-legend span {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .calendar-legend i {
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #e6adc2;
 }
 
-/* Mobile */
+/* ========================================
+   RESPONSIVE TO THE CALENDAR CARD ITSELF
+   (not the browser window)
+======================================== */
 
-@media (max-width: 600px) {
-  .dashboard {
-    padding: 25px 12px;
-  }
+/* Narrow calendar: compact buttons and smaller dates. */
+@container hgo-calendar (max-width: 440px) {
+  .calendar-header h2 { font-size: 19px; }
+  .calendar-navigation button { width: 25px; height: 25px; }
+  .calendar-navigation .calendar-today-button { width: auto; padding: 0 6px; }
+  .calendar-day { padding: 3px; }
+  .calendar-day-number { min-width: 17px; height: 17px; font-size: 10px; }
+  .calendar-moments { font-size: 7px; }
+}
 
-  .calendar {
-    padding: 18px 13px;
-  }
+/* Very narrow calendar: reduce clutter. */
+@container hgo-calendar (max-width: 335px) {
+  .calendar-header { flex-wrap: wrap; }
+  .calendar-header h2 { font-size: 18px; }
+  .calendar-weekdays span { font-size: 8px; letter-spacing: 0; }
+  .calendar-day { align-items: center; padding: 2px; }
+  .calendar-navigation { gap: 2px; }
+}
 
-  .calendar-header {
-    flex-wrap: wrap;
-  }
-
-  .calendar-header h2 {
-    font-size: 22px;
-  }
-
-  .calendar-grid {
-    gap: 3px;
-  }
-
-  .calendar-day {
-    min-height: 64px;
-    padding: 6px 2px;
-    align-items: center;
-  }
-
-  .calendar-day-number {
-    font-size: 11px;
-  }
-
+/* Short calendar: use a tiny activity dot to preserve date readability. */
+@container hgo-calendar (max-height: 375px) {
+  .calendar-header h2 { font-size: 19px; }
+  .calendar-eyebrow { margin-bottom: 2px; font-size: 8px; }
   .calendar-moments {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
     padding: 0;
     border-radius: 50%;
     background: #e9abc3;
-
-    /* Show a dot instead of text on phones */
     font-size: 0;
     overflow: hidden;
   }
+  .calendar-day { gap: 1px; }
+  .calendar-legend { font-size: 8px; }
+}
+
+/* Extremely short calendars: prioritize the date grid. */
+@container hgo-calendar (max-height: 290px) {
+  .calendar-eyebrow { display: none; }
+  .calendar-legend { display: none; }
+  .calendar-day-number { min-width: 16px; height: 16px; font-size: 10px; }
 }

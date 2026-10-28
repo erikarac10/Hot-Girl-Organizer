@@ -154,7 +154,7 @@ function LastDone({ onDateSelect }: LastDoneProps) {
 
         <div>
           <p className="last-done-eyebrow">
-            A LITTLE MEMORY JOG
+            caught in 4k moments
           </p>
 
           <h2>When did I last…?</h2>
@@ -167,7 +167,7 @@ function LastDone({ onDateSelect }: LastDoneProps) {
         <Search size={17} />
 
         <input
-          placeholder="e.g. combed Avery"
+          placeholder="e.g. touch grass"
           value={search}
           onChange={event => {
             setSearch(event.target.value);

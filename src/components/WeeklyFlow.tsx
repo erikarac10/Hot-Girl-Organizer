@@ -108,17 +108,10 @@ function WeeklyFlow({
 
       <div className="weekly-flow-header">
         <div>
-          <p className="weekly-flow-eyebrow">
-            A LITTLE LOOK BACK
-          </p>
 
           <h2>
-            This Week's Flow <span>✧</span>
+            The Weekly Glaze <span>✧</span>
           </h2>
-
-          <p className="weekly-flow-description">
-            Your little moments, all in one place.
-          </p>
         </div>
 
         <div className="weekly-flow-icon">
@@ -218,15 +211,15 @@ function WeeklyFlow({
 
       <div className="weekly-flow-footer">
         <span>
-          <strong>{totalMoments}</strong>{" "}
-          {totalMoments === 1 ? "moment" : "moments"} recorded
+          <strong>{totalMoments}</strong>{" aura "}
+          {totalMoments === 1 ? "activity" : "activities"} 
         </span>
 
         <span className="weekly-flow-divider">✦</span>
 
         <span>
           <strong>{daysWithMoments}</strong>{" "}
-          {daysWithMoments === 1 ? "day" : "days"} with memories
+          {daysWithMoments === 1 ? "day" : "days"} logged
         </span>
       </div>
 
