@@ -1,13 +1,29 @@
 /* Main card */
 
 .reminders {
+  container-type: inline-size;
+
+  display: flex;
+  flex-direction: column;
+
   margin-top: 22px;
   padding: 27px;
-  min-height: 470px;
+
+  min-width: 0;
+  min-height: 0;
+
   background: #fff;
   border: 1px solid #f0e9e9;
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(79, 54, 69, 0.027);
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: #efdbe5 transparent;
 }
 
 /* Heading */
@@ -218,7 +234,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 46px 18px;
+  justify-content: center;
+
+  flex: 1;
+  min-height: 0;
+
+  padding: 12px 18px;
   text-align: center;
 }
 
@@ -330,4 +351,105 @@
 
 .done-reminders .reminder-row {
   background: #fcf9fa;
+}
+
+/* ========================================
+   REMINDERS — RESPONSIVE CONTENT
+======================================== */
+
+/* Medium-sized card */
+
+@container (max-width: 400px) {
+
+  .reminders-heading h2 {
+    font-size: 19px;
+  }
+
+  .reminders-heading-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .reminders-eyebrow {
+    font-size: 8px;
+  }
+
+  .new-reminder input {
+    height: 36px;
+    font-size: 11px;
+  }
+
+  .new-reminder button {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+
+  .reminder-row {
+    padding: 11px;
+    gap: 8px;
+  }
+
+  .reminder-text {
+    font-size: 11px;
+  }
+
+  .reminders-empty strong {
+    font-size: 17px;
+  }
+}
+
+
+/* Small card */
+
+@container (max-width: 300px) {
+
+  .reminders-heading {
+    gap: 8px;
+  }
+
+  .reminders-heading h2 {
+    font-size: 17px;
+  }
+
+  .reminders-heading-icon {
+    width: 29px;
+    height: 29px;
+  }
+
+  .new-reminder {
+    flex-wrap: wrap;
+  }
+
+  .new-reminder input {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .new-reminder button {
+    width: 100%;
+  }
+
+  .reminder-circle {
+    width: 20px;
+    height: 20px;
+    flex-basis: 20px;
+  }
+
+  .reminder-icon-button {
+    padding: 2px;
+  }
+
+  .reminders-empty-heart {
+    width: 45px;
+    height: 45px;
+    font-size: 28px;
+  }
+
+  .reminders-empty strong {
+    font-size: 15px;
+  }
+
+  .reminders-empty p {
+    font-size: 10px;
+  }
 }

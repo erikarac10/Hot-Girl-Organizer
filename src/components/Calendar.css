@@ -10,7 +10,7 @@
   container-type: size;
 
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 8px;
 
   min-width: 0;
@@ -257,3 +257,116 @@
   .calendar-legend { display: none; }
   .calendar-day-number { min-width: 16px; height: 16px; font-size: 10px; }
 }
+
+/* ========================================
+   CALENDAR — MOOD + ENERGY VISUALIZATION
+======================================== */
+
+.calendar-day.mood-none {
+  --mood-fill: linear-gradient(
+    to top,
+    #8BB8F0,
+    #C5A3F5
+  );
+  --mood-accent: #8BB8F0;
+}
+
+
+/* ========================================
+   BATTERY FILL INSIDE CALENDAR DAYS
+======================================== */
+
+.calendar-day {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Fill rises from bottom to top */
+
+/* ========================================
+   CALENDAR — MOOD + BATTERY FILL
+======================================== */
+
+.calendar-mood-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 100%;
+
+  background: linear-gradient(
+    to top,
+    var(--mood-dark, #c5daee),
+    var(--mood-light, #EFF6FF)
+  );
+
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 0;
+
+  transition: height 0.2s ease;
+}
+
+.calendar-day {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.calendar-day-number {
+  position: relative;
+  z-index: 1;
+}
+
+.calendar-day.has-mood.selected {
+  border: 2px solid var(--mood-dark);
+}
+
+/* Mood recorded without battery level */
+
+.calendar-mood-marker {
+  position: absolute;
+
+  bottom: 4px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+  background: var(--mood-dark, #8BB8F0);
+
+  pointer-events: none;
+}
+
+/* Keep dates and activity counts visible */
+
+.calendar-day-number,
+.calendar-moments {
+  position: relative;
+  z-index: 1;
+}
+
+/* Make current date stand out */
+
+.calendar-day.current .calendar-day-number {
+  background: #b97596;
+  color: white;
+}
+
+/* Mood legend */
+
+.calendar-legend .calendar-legend-mood {
+  background: linear-gradient(
+    135deg,
+    #F4C77D,
+    #EFA0C3,
+    #8BBCE8,
+    #9D83D8,
+    #8ECBB2
+  );
+}
+

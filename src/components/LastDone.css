@@ -1,12 +1,29 @@
 /* Main card */
 
 .last-done {
+  container-type: inline-size;
+
+  display: flex;
+  flex-direction: column;
+
   margin-top: 22px;
   padding: 22px 23px 23px;
+
+  min-width: 0;
+  min-height: 0;
+
   background: white;
   border: 1px solid #f0e9e9;
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(79, 54, 69, 0.027);
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: #efdbe5 transparent;
 }
 
 /* Heading */
@@ -175,5 +192,125 @@
 @media (max-width: 600px) {
   .last-done {
     padding: 19px 17px;
+  }
+}
+/* ========================================
+   LAST DONE — RESPONSIVE CONTENT
+======================================== */
+
+/* Prevent heading from overflowing */
+
+.last-done-heading > div:last-child {
+  min-width: 0;
+}
+
+.last-done-heading h2 {
+  overflow-wrap: anywhere;
+}
+
+.last-done-search {
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.last-done-result span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.last-done-history-row > div {
+  min-width: 0;
+}
+
+/* ========================================
+   MEDIUM CARD
+======================================== */
+
+@container (max-width: 400px) {
+
+  .last-done-heading {
+    gap: 9px;
+  }
+
+  .last-done-heading h2 {
+    font-size: 17px;
+  }
+
+  .last-done-icon {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+
+  .last-done-eyebrow {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .last-done-search input {
+    height: 35px;
+    font-size: 10px;
+  }
+
+  .last-done-result {
+    font-size: 10px;
+    gap: 6px;
+  }
+
+  .last-done-history {
+    padding: 10px;
+  }
+}
+
+/* ========================================
+   SMALL CARD
+======================================== */
+
+@container (max-width: 300px) {
+
+  .last-done-heading h2 {
+    font-size: 15px;
+  }
+
+  .last-done-icon {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+  }
+
+  .last-done-eyebrow {
+    font-size: 7px;
+    letter-spacing: 0.5px;
+  }
+
+  .last-done-search {
+    padding: 0 8px;
+    gap: 5px;
+  }
+
+  .last-done-search input {
+    height: 32px;
+    font-size: 10px;
+  }
+
+  .last-done-result {
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+
+  .last-done-result strong {
+    font-size: 9px;
+  }
+
+  .last-done-history-row {
+    padding: 7px 0;
+  }
+
+  .last-done-history-row strong {
+    font-size: 10px;
+  }
+
+  .last-done-history-row p {
+    font-size: 10px;
   }
 }

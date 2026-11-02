@@ -309,34 +309,6 @@ useEffect(() => {
         </button>
       </div>
 
-      <div className="receipts-navigation">
-        <button onClick={() => changeDay(-1)} aria-label="Previous day">
-          <ChevronLeft size={17} />
-        </button>
-
-        <span>
-          {isToday
-            ? "Today"
-            : selectedDate.toLocaleDateString("en-CA", {
-                month: "short",
-                day: "numeric"
-              })}
-        </span>
-
-        <button onClick={() => changeDay(1)} aria-label="Next day">
-          <ChevronRight size={17} />
-        </button>
-
-        {!isToday && (
-          <button
-            className="receipts-today"
-            onClick={() => onDateSelect(new Date())}
-          >
-            Today
-          </button>
-        )}
-      </div>
-
       {/* Today's logged activities */}
 
       {dayMoments.length === 0 ? (

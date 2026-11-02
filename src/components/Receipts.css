@@ -1,4 +1,6 @@
 .receipts {
+  display: flex;
+flex-direction: column;
   margin-top: 22px;
   padding: 26px;
   background: white;
@@ -108,7 +110,9 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 46px 18px;
+  padding: 0 18px;
+  flex: 1;
+justify-content: center;
 }
 
 .receipts-heart {
@@ -555,4 +559,132 @@
   .hgo-fields {
     grid-template-columns: 1fr;
   }
+}
+
+/* ========================================
+   ACTIVITIES — RESPONSIVE CONTENT
+======================================== */
+
+.receipts {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Heading and Add button */
+
+.receipts-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.receipts-header > div {
+  flex: 1 1 160px;
+  min-width: 0;
+}
+
+.receipts-add {
+  flex-shrink: 0;
+}
+
+/* Scroll activities inside the card */
+
+.receipts-list {
+  container-type: inline-size;
+
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: #efdbe5 transparent;
+}
+
+/* Centre empty state */
+
+.receipts-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  flex: 1;
+  min-height: 0;
+
+  padding: 12px;
+  text-align: center;
+}
+
+/* Activity entries */
+
+.receipts-entry {
+  min-width: 0;
+}
+
+.hgo-entry-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.hgo-entry-content > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.hgo-entry-actions {
+  flex-shrink: 0;
+}
+
+/* Compact entries in narrow cards */
+
+@container (max-width: 280px) {
+  .receipts-entry {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .hgo-entry-actions {
+    margin-left: auto;
+  }
+}
+
+/* ========================================
+   ACTIVITY NOTES — RESPONSIVE INPUT
+======================================== */
+
+.hgo-modal .hgo-label {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.hgo-modal .hgo-label textarea {
+  display: block;
+
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  min-height: 90px;
+  max-height: 35dvh;
+
+  box-sizing: border-box;
+  resize: vertical;
+  overflow-y: auto;
+}
+
+.hgo-modal .hgo-fields > label {
+  min-width: 0;
+}
+
+.hgo-modal .hgo-fields input {
+  max-width: 100%;
+  box-sizing: border-box;
 }

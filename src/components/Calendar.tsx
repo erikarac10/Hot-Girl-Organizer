@@ -1,187 +1,279 @@
-import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import "./Calendar.css";
+
+/* ========================================
+   TYPES
+======================================== */
+
+type Mood =
+  | "amazing"
+  | "good"
+  | "calm"
+  | "meh"
+  | "anxious"
+  | "rough";
+
+type Energy = "low" | "medium" | "high";
+
+type MoodEntry = {
+  mood?: Mood;
+  energy?: Energy;
+  energyPercent?: number;
+  note?: string;
+};
+
+type MoodHistory = Record<string, MoodEntry>;
 
 type CalendarProps = {
   selectedDate: Date;
   onDateSelect: (date: Date) => void;
 };
 
-type Moment = {
-  id: string;
-  date: string;
+/* ========================================
+   MOOD LABELS
+======================================== */
+
+const moodLabels: Record<Mood, string> = {
+  amazing: "Mogging",
+  good: "Absolutely based",
+  calm: "Unbothered queen",
+  meh: "Mid",
+  anxious: "Negative aura",
+  rough: "Cooked"
 };
 
+/* ========================================
+   DATE HELPERS
+======================================== */
+
 function dateKey(date: Date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0")
+  ].join("-");
 }
 
+function sameDay(first: Date, second: Date) {
+  return dateKey(first) === dateKey(second);
+}
+
+function getMonthDays(month: Date) {
+  const year = month.getFullYear();
+  const monthIndex = month.getMonth();
+
+  const firstDay = new Date(year, monthIndex, 1);
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+
+  // Monday = first day of the week
+  const offset = (firstDay.getDay() + 6) % 7;
+
+  const totalCells = Math.ceil((offset + daysInMonth) / 7) * 7;
+
+  return Array.from({ length: totalCells }, (_, index) => {
+    return new Date(year, monthIndex, index - offset + 1);
+  });
+}
+
+/* ========================================
+   STORAGE
+======================================== */
+
+function loadMoods(): MoodHistory {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem("hot-girl-moodboard") || "{}"
+    );
+
+    return saved && typeof saved === "object" && !Array.isArray(saved)
+      ? saved
+      : {};
+  } catch {
+    return {};
+  }
+}
+
+/* ========================================
+   BATTERY LEVEL
+======================================== */
+
+function getEnergyPercent(entry?: MoodEntry): number | null {
+  if (!entry) return null;
+
+  if (
+    typeof entry.energyPercent === "number" &&
+    Number.isFinite(entry.energyPercent)
+  ) {
+    return Math.max(0, Math.min(100, entry.energyPercent));
+  }
+
+  // Compatibility with old Low / Medium / High entries
+  switch (entry.energy) {
+    case "low":
+      return 20;
+
+    case "medium":
+      return 50;
+
+    case "high":
+      return 80;
+
+    default:
+      return null;
+  }
+}
+
+/* ========================================
+   CALENDAR COMPONENT
+======================================== */
+
 function Calendar({ selectedDate, onDateSelect }: CalendarProps) {
-  const [currentMonth, setCurrentMonth] = useState(
+  const [viewMonth, setViewMonth] = useState(
     () => new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1)
   );
 
-  const [moments, setMoments] = useState<Moment[]>([]);
+  const [moods, setMoods] = useState<MoodHistory>(loadMoods);
 
-  // Load your existing activity history.
+  const today = new Date();
+
+  /* Follow selected dates from other components */
+
   useEffect(() => {
-    function refresh() {
-      try {
-        setMoments(
-          JSON.parse(localStorage.getItem("hot-girl-moments") || "[]")
-        );
-      } catch {
-        setMoments([]);
-      }
-    }
-
-    refresh();
-
-    window.addEventListener("hgo-history-updated", refresh);
-    window.addEventListener("storage", refresh);
-
-    return () => {
-      window.removeEventListener("hgo-history-updated", refresh);
-      window.removeEventListener("storage", refresh);
-    };
-  }, []);
-
-  // Follow the selected date when another component changes it.
-  useEffect(() => {
-    setCurrentMonth(
+    setViewMonth(
       new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1)
     );
   }, [selectedDate]);
 
-  const year = currentMonth.getFullYear();
-  const month = currentMonth.getMonth();
+  /* Update when mood or battery changes */
 
-  // Build complete calendar weeks, including neighbouring months.
-  const calendarDays = useMemo(() => {
-    const first = new Date(year, month, 1);
-    const offset = (first.getDay() + 6) % 7;
-
-    const start = new Date(year, month, 1 - offset);
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const totalCells = Math.ceil((offset + daysInMonth) / 7) * 7;
-
-    return Array.from({ length: totalCells }, (_, index) => {
-      return new Date(
-        start.getFullYear(),
-        start.getMonth(),
-        start.getDate() + index
-      );
-    });
-  }, [year, month]);
-
-  function changeMonth(amount: number) {
-    setCurrentMonth(new Date(year, month + amount, 1));
+useEffect(() => {
+  function refreshMoods() {
+    setMoods(loadMoods());
   }
 
-  function goToToday() {
-    const today = new Date();
+  window.addEventListener("hgo-mood-updated", refreshMoods);
+  window.addEventListener("storage", refreshMoods);
 
-    setCurrentMonth(
-      new Date(today.getFullYear(), today.getMonth(), 1)
-    );
+  return () => {
+    window.removeEventListener("hgo-mood-updated", refreshMoods);
+    window.removeEventListener("storage", refreshMoods);
+  };
+}, []);
 
-    onDateSelect(today);
-  }
+  const calendarDays = getMonthDays(viewMonth);
 
-  function momentCount(date: Date) {
-    const key = dateKey(date);
-
-    return moments.filter(moment => moment.date === key).length;
-  }
-
-  const todayKey = dateKey(new Date());
-  const selectedKey = dateKey(selectedDate);
+  const monthLabel = viewMonth.toLocaleDateString("en-CA", {
+    month: "long",
+    year: "numeric"
+  });
 
   return (
     <section className="calendar">
 
+      {/* ========================================
+          HEADER
+      ======================================== */}
+
       <div className="calendar-header">
         <div>
           <p className="calendar-eyebrow">
-            larping timeline
+            LITTLE MOMENTS THROUGH TIME
           </p>
 
-          <h2>
-            {currentMonth.toLocaleDateString("en-CA", {
-              month: "long",
-              year: "numeric",
-            })}
-          </h2>
+          <h2>{monthLabel}</h2>
         </div>
 
-        <div className="calendar-navigation">
-          <button
-            onClick={() => changeMonth(-1)}
-            aria-label="Previous month"
-          >
-            <ChevronLeft size={18} />
-          </button>
 
-          <button onClick={goToToday} className="calendar-today-button">
-            Today
-          </button>
-
-          <button
-            onClick={() => changeMonth(1)}
-            aria-label="Next month"
-          >
-            <ChevronRight size={18} />
-          </button>
-        </div>
       </div>
 
+      {/* ========================================
+          WEEKDAY LABELS
+      ======================================== */}
+
       <div className="calendar-weekdays">
-        {["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map(day => (
+        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(day => (
           <span key={day}>{day}</span>
         ))}
       </div>
 
-      <div className="calendar-grid">
-        {calendarDays.map(date => {
-          const key = dateKey(date);
-          const count = momentCount(date);
+      {/* ========================================
+          CALENDAR DAYS
+      ======================================== */}
 
-          const outside = date.getMonth() !== month;
-          const selected = key === selectedKey;
-          const current = key === todayKey;
+      <div className="calendar-grid">
+
+        {calendarDays.map(day => {
+          const key = dateKey(day);
+
+          const moodEntry = moods[key];
+          const mood = moodEntry?.mood;
+
+          const energyPercent = getEnergyPercent(moodEntry);
+
+          const isSelected = sameDay(day, selectedDate);
+          const isToday = sameDay(day, today);
+
+          const isOutside =
+            day.getMonth() !== viewMonth.getMonth();
+
+          const moodClass = mood
+            ? `mood-${mood}`
+            : "mood-none";
+
+          const moodDescription = mood
+            ? moodLabels[mood]
+            : "No mood recorded";
+
+          const energyDescription =
+            energyPercent === null
+              ? "No battery recorded"
+              : `${energyPercent}% energy`;
 
           return (
             <button
+              type="button"
               key={key}
-              onClick={() => onDateSelect(date)}
               className={[
                 "calendar-day",
-                outside ? "outside" : "",
-                selected ? "selected" : "",
-                current ? "current" : "",
-              ].join(" ")}
-              aria-label={date.toDateString()}
-              aria-pressed={selected}
+                moodClass,
+                mood ? "has-mood" : "",
+                isSelected ? "selected" : "",
+                isToday ? "current" : "",
+                isOutside ? "outside" : ""
+              ].filter(Boolean).join(" ")}
+              onClick={() => onDateSelect(day)}
+              aria-pressed={isSelected}
+              title={[
+                day.toLocaleDateString("en-CA", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric"
+                }),
+                moodDescription,
+                energyDescription
+              ].join(" • ")}
             >
+
+{/* MOOD + ENERGY FILL */}
+
+{energyPercent !== null && (
+  <span
+    className="calendar-mood-fill"
+    style={{ height: `${energyPercent}%` }}
+    aria-hidden="true"
+  />
+)}
+
+              {/* DATE NUMBER */}
+
               <span className="calendar-day-number">
-                {date.getDate()}
+                {day.getDate()}
               </span>
 
-              {count > 0 && (
-                <span className="calendar-moments">
-                  {count} {count === 1 ? "activity" : "activities"}
-                </span>
-              )}
             </button>
           );
         })}
-      </div>
 
-      <div className="calendar-legend">
-        <span>
-          <i />
-          Logged aura activity
-        </span>
       </div>
 
     </section>

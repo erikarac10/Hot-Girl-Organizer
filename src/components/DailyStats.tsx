@@ -224,24 +224,6 @@ function DailyStats({ selectedDate }: DailyStatsProps) {
   return (
     <section className="daily-stats">
 
-      {/* Sidebar branding */}
-      <div className="sidebar-brand">
-        <span className="brand-flower">✿</span>
-
-        <h1>Hot Girl Organizer</h1>
-
-        <p>the horrors persist but so do i ♡</p>
-
-        <span className="sidebar-date">
-          {new Date().toLocaleDateString("en-CA", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </span>
-      </div>
-
-      {/* Daily statistics */}
       {/* Daily statistics */}
       {stats.map(stat => (
         <div

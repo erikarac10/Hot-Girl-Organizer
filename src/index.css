@@ -895,10 +895,7 @@ select {
     flex: 1;
     min-height: 0;
     overflow: hidden;
-    grid-template-rows:
-      minmax(0, 0.9fr)
-      minmax(0, 1.65fr)
-      minmax(0, 1.65fr);
+    grid-template-rows: max-content max-content max-content;
   }
 
   .hgo-screen-grid .hgo-screen-row > section,
@@ -910,6 +907,13 @@ select {
     scrollbar-width: thin;
     scrollbar-color: #efdbe5 transparent;
   }
+
+  /* Respect individual component heights */
+
+#root .hgo-screen-grid .hgo-row-top > section {
+  height: auto;
+  align-self: start;
+}
 
   .hgo-screen-grid .hgo-side-stack {
     grid-template-rows: minmax(0, 1.28fr) minmax(0, 0.95fr);
@@ -962,27 +966,1016 @@ select {
 }
 
 /* =============================================
-   VIBE CHECK (MOODBOARD) — SIZE CONTROL
-   Edit ONLY width and height here.
-   MoodBoard.css scales the contents to the card.
+   VIBE CHECK — SIZE CONTROL
+
+   Adjust the width and height here.
+   MoodBoard.css handles the internal layout.
 ============================================= */
 
-#root .hgo-shell .hgo-page .hgo-screen-grid .moodboard {
-  --moodboard-width: 100%;    /* Try 420px, 480px, 100% */
-  --moodboard-height: 360px;  /* Try 300px, 400px, 500px */
+/* ========================================
+   VIBE CHECK — SIZE CONTROL
+======================================== */
+
+#root .hgo-shell > .hgo-empty-sidebar .moodboard {
+
+  /* ✿ ADJUST THESE ✿ */
+
+  --moodboard-width: 100%;
+  --moodboard-height: auto;
 
   width: min(100%, var(--moodboard-width));
   height: var(--moodboard-height);
 
-  /* Override the full-height dashboard rules. */
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+
+  flex-shrink: 0;
+  align-self: center;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* ========================================
+   MOOD COLOUR PALETTE
+   Light = battery fill / calendar fill
+   Dark = battery border / selected day border
+======================================== */
+
+:root {
+  /* ✦ AMAZING — Butter yellow */
+  --amazing-light: #FFF8E8;
+  --amazing-dark: #ecdfc0;
+
+  /* ♡ GOOD — Baby pink */
+  --good-light: #FFF0F6;
+  --good-dark: #eacfdb;
+
+  /* ♣ CALM — Soft sage green */
+  --calm-light: #EFF9F0;
+  --calm-dark: #b6d6c0;
+
+  /* ⋯ MEH — Soft cloudy grey */
+  --meh-light: #F5F4F6;
+  --meh-dark: #d6d5db;
+
+  /* ⚡ ANXIOUS — Soft peach orange */
+  --anxious-light: #FFF1E8;
+  --anxious-dark: #e6d0c4;
+
+  /* ☂ COOKED — Powder blue */
+  --rough-light: #EFF6FF;
+  --rough-dark: #c5daee;
+}
+
+/* ========================================
+   SHARED MOOD COLOURS
+======================================== */
+
+.moodboard-mood.mood-amazing,
+.moodboard:has(.mood-amazing.selected),
+.calendar-day.mood-amazing {
+  --mood-light: var(--amazing-light);
+  --mood-dark: var(--amazing-dark);
+}
+
+.moodboard-mood.mood-good,
+.moodboard:has(.mood-good.selected),
+.calendar-day.mood-good {
+  --mood-light: var(--good-light);
+  --mood-dark: var(--good-dark);
+}
+
+.moodboard-mood.mood-calm,
+.moodboard:has(.mood-calm.selected),
+.calendar-day.mood-calm {
+  --mood-light: var(--calm-light);
+  --mood-dark: var(--calm-dark);
+}
+
+.moodboard-mood.mood-meh,
+.moodboard:has(.mood-meh.selected),
+.calendar-day.mood-meh {
+  --mood-light: var(--meh-light);
+  --mood-dark: var(--meh-dark);
+}
+
+.moodboard-mood.mood-anxious,
+.moodboard:has(.mood-anxious.selected),
+.calendar-day.mood-anxious {
+  --mood-light: var(--anxious-light);
+  --mood-dark: var(--anxious-dark);
+}
+
+.moodboard-mood.mood-rough,
+.moodboard:has(.mood-rough.selected),
+.calendar-day.mood-rough {
+  --mood-light: var(--rough-light);
+  --mood-dark: var(--rough-dark);
+}
+
+/* ========================================
+   MOOD BATTERY — USE SHARED PALETTE
+   This more specific rule overrides any old
+   hard-coded green gradient in MoodBoard.css.
+======================================== */
+
+#root .hgo-shell > .hgo-empty-sidebar .moodboard:has(.moodboard-mood.selected) .battery-fill {
+  background: linear-gradient(
+    to top,
+    var(--mood-dark),
+    var(--mood-light)
+  );
+}
+
+#root .hgo-shell > .hgo-empty-sidebar .moodboard:has(.moodboard-mood.selected) .battery-body {
+  border-color: var(--mood-dark);
+}
+
+#root .hgo-shell > .hgo-empty-sidebar .moodboard:has(.moodboard-mood.selected) .battery-terminal {
+  background: var(--mood-dark);
+}
+
+/* ========================================
+   SIDEBAR HEADER — EXTRA COMPACT DATE
+======================================== */
+
+.sidebar-date-wrapper {
+  position: relative;
+  margin-top: 4px;
+  padding-bottom: 12px;
+}
+
+.sidebar-date-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+
+  width: fit-content;
+  margin: 0 auto;
+  padding: 2px 3px;
+
+  border-radius: 7px;
+}
+
+.sidebar-date-navigation button {
+  width: 19px;
+  height: 19px;
+  padding: 0;
+  border-radius: 5px;
+}
+
+.sidebar-date-navigation button svg {
+  width: 12px;
+  height: 12px;
+}
+
+.sidebar-date-navigation span {
+  min-width: 75px;
+  font-size: 9px;
+}
+
+.sidebar-date-wrapper > .sidebar-today-label {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-size: 8px;
+  font-weight: 700;
+  color: #c59bac;
+}
+
+/* ========================================
+   DAILY RITUALS — SIZE CONTROL
+   Change width and height here!
+======================================== */
+
+#root .hgo-shell .hgo-page .hgo-screen-grid .daily-rituals {
+
+  /* ✿ ADJUST THESE ✿ */
+
+  --rituals-width: 100%;
+  --rituals-height: 300px;
+
+  width: min(100%, var(--rituals-width));
+  height: var(--rituals-height);
+
   min-width: 0;
   min-height: 0;
   max-width: 100%;
   max-height: none;
+
   justify-self: start;
   align-self: start;
 
-  /* Very small sizes remain usable rather than clipping controls. */
+  overflow: hidden;
+}
+
+/* ========================================
+   REMINDERS — SIZE CONTROL
+   Change width and height here!
+======================================== */
+
+#root .hgo-shell .hgo-page .hgo-screen-grid .reminders {
+
+  /* ✿ ADJUST THESE ✿ */
+
+  --reminders-width: 100%;
+  --reminders-height: 300px;
+
+  width: min(100%, var(--reminders-width));
+  height: var(--reminders-height);
+
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: none;
+
+  justify-self: start;
+  align-self: start;
+
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+/* ========================================
+   LAST DONE — SIZE CONTROL
+   Change width and height here!
+======================================== */
+
+#root .hgo-shell .hgo-page .hgo-screen-grid .last-done {
+
+  /* ✿ ADJUST THESE ✿ */
+
+  --lastdone-width: 400px;
+  --lastdone-height: 250px;
+
+  width: min(100%, var(--lastdone-width));
+  height: var(--lastdone-height);
+
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: none;
+
+  justify-self: start;
+  align-self: start;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+/* ========================================
+   SIDEBAR — JOURNAL HEADER
+======================================== */
+
+.hgo-sidebar-brand {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 12px 0 0;
+}
+
+
+/* ========================================
+   BRANDING
+======================================== */
+
+.hgo-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 5px;
+}
+
+/* Flower icon */
+
+.hgo-sidebar-flower {
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 12px;
+
+  background: #fcebf2;
+  color: #ce99b1;
+
+  font-size: 23px;
+}
+
+/* Brand title */
+
+.hgo-sidebar-brand-text {
+  min-width: 0;
+}
+
+.hgo-sidebar-brand-text h1 {
+  margin: 0;
+
+  font-family: "Fraunces", serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+
+  color: #79576d;
+}
+
+/* Subtitle */
+
+.hgo-sidebar-brand-text p {
+  margin: 4px 0 0;
+
+  font-size: 9px;
+  font-style: italic;
+  line-height: 1.5;
+
+  color: #b59aaa;
+}
+
+
+/* ========================================
+   DATE CARD
+======================================== */
+
+.hgo-date-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 13px;
+  padding: 13px 9px;
+
+  background: #fff8fb;
+
+  border: 1px solid #f3e4ec;
+  border-radius: 13px;
+}
+
+/* Small heading */
+
+.hgo-date-eyebrow {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+
+  color: #c39aad;
+}
+
+
+/* ========================================
+   DATE CONTROLS
+======================================== */
+
+.hgo-date-controls {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
+  align-items: center;
+
+  gap: 4px;
+  width: 100%;
+
+}
+
+/* Arrow buttons */
+
+.hgo-date-controls button {
+  display: grid;
+  place-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  padding: 0;
+
+  border: 1px solid #f0e2e9;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #bc8fa6;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.hgo-date-controls button:hover {
+  background: #f8e8f0;
+  color: #a66f8c;
+}
+
+
+/* ========================================
+   DATE DISPLAY
+======================================== */
+
+.hgo-date-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 4px;
+  min-width: 0;
+
+  text-align: center;
+}
+
+/* Weekday */
+
+.hgo-date-weekday {
+  font-family: "Fraunces", serif;
+  font-size: 16px;
+  font-weight: 600;
+
+  color: #79576d;
+}
+
+/* Full date */
+
+.hgo-date-full {
+  font-size: 10px;
+  font-weight: 600;
+
+  color: #b49aaa;
+}
+
+
+/* ========================================
+   TODAY INDICATOR
+======================================== */
+
+.hgo-date-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 24px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  color: #c594ad;
+}
+
+.hgo-date-status span {
+  white-space: nowrap;
+}
+
+
+/* ========================================
+   DIVIDER
+======================================== */
+
+.hgo-sidebar-divider {
+  height: 1px;
+
+  margin: 5px 5px 18px;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    #efdde6,
+    transparent
+  );
+}
+
+/* ========================================
+   TOP ROW — THREE COMPONENTS
+======================================== */
+
+.hgo-row-top {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+/* Dashboard now has two rows */
+
+#root .hgo-shell .hgo-page > .dashboard.hgo-screen-grid {
+  grid-template-rows: max-content max-content;
+}
+
+/* Stack components on smaller screens */
+
+@media (max-width: 1000px) {
+  .hgo-row-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   ACTIVITIES — SIZE CONTROL
+======================================== */
+
+#root .hgo-shell .hgo-page .hgo-screen-grid .receipts {
+
+  /* CHANGE THESE TWO VALUES */
+
+  --activities-width: 100%;
+  --activities-height: 300px;
+
+  width: min(100%, var(--activities-width));
+  height: var(--activities-height);
+
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: none;
+
+  justify-self: start;
+  align-self: start;
+
+  box-sizing: border-box;
+}
+
+/* ========================================
+   DASHBOARD — 2 ROWS, 3 COLUMNS
+======================================== */
+
+#root .hgo-shell .hgo-page > .dashboard.hgo-screen-grid.hgo-new-layout {
+
+  /* ADJUST BOTTOM ROW HEIGHT HERE */
+  --bottom-row-height: 340px;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  grid-template-rows:
+    minmax(0, 1fr)
+    var(--bottom-row-height);
+
+  grid-template-areas:
+    "daily activities reminders"
+    "calendar future history";
+
+  gap: 12px;
+
+  width: 100%;
+  height: 100dvh;
+
+  min-width: 0;
+  min-height: 0;
+
+  padding: 14px 20px 18px;
+
+  overflow: hidden;
+}
+
+/* ========================================
+   TOP ROW
+======================================== */
+
+#root .hgo-shell .hgo-page .hgo-new-layout > .daily-rituals {
+  grid-area: daily;
+
+  --rituals-width: 100%;
+  --rituals-height: 100%;
+
+  margin: 0;
+}
+
+#root .hgo-shell .hgo-page .hgo-new-layout > .receipts {
+  grid-area: activities;
+
+  --activities-width: 100%;
+  --activities-height: 100%;
+
+  margin: 0;
+}
+
+#root .hgo-shell .hgo-page .hgo-new-layout > .reminders {
+  grid-area: reminders;
+
+  --reminders-width: 100%;
+  --reminders-height: 100%;
+
+  margin: 0;
+}
+
+/* ========================================
+   BOTTOM ROW
+======================================== */
+
+/* Calendar — Bottom Left */
+
+#root .hgo-shell .hgo-page .hgo-new-layout > .calendar {
+  grid-area: calendar;
+
+  --calendar-width: 100%;
+  --calendar-height: 100%;
+
+  margin: 0;
+}
+
+/* Empty Space — Bottom Middle */
+
+.hgo-new-layout > .hgo-future-space {
+  grid-area: future;
+
+  min-width: 0;
+  min-height: 0;
+}
+
+/* When Did I Last — Bottom Right */
+
+#root .hgo-shell .hgo-page .hgo-new-layout > .last-done {
+  grid-area: history;
+
+  --lastdone-width: 100%;
+  --lastdone-height: 100%;
+
+  margin: 0;
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 760px) {
+
+  #root .hgo-shell {
+    height: auto;
+    overflow: visible;
+  }
+
+  #root .hgo-shell .hgo-page {
+    height: auto;
+    overflow: visible;
+  }
+
+  #root .hgo-shell .hgo-page > .dashboard.hgo-screen-grid.hgo-new-layout {
+    height: auto;
+    overflow: visible;
+
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+
+    grid-template-areas:
+      "daily"
+      "activities"
+      "reminders"
+      "calendar"
+      "future"
+      "history";
+  }
+
+  #root .hgo-shell .hgo-page .hgo-new-layout > .daily-rituals {
+    --rituals-height: 320px;
+  }
+
+  #root .hgo-shell .hgo-page .hgo-new-layout > .receipts {
+    --activities-height: 320px;
+  }
+
+  #root .hgo-shell .hgo-page .hgo-new-layout > .reminders {
+    --reminders-height: 320px;
+  }
+
+  #root .hgo-shell .hgo-page .hgo-new-layout > .calendar {
+    --calendar-height: 340px;
+  }
+
+  #root .hgo-shell .hgo-page .hgo-new-layout > .last-done {
+    --lastdone-height: 300px;
+  }
+}
+
+/* ========================================
+   DAILY STATS — DASHBOARD PANEL
+======================================== */
+
+#root .hgo-shell .hgo-page .hgo-new-layout > .hgo-stats-panel {
+  grid-area: future;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: 0;
+
+  padding: 12px;
+
+  background: linear-gradient(
+    145deg,
+    #ffffff,
+    #fff8fb
+  );
+
+  border: 1px solid #f0e6ec;
+  border-radius: 18px;
+
+  box-shadow: 0 8px 32px rgba(79, 54, 69, 0.03);
+
+  overflow: hidden;
+}
+
+/* Two-column stats grid */
+
+#root .hgo-stats-panel .daily-stats {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(64px, 1fr);
+
+  gap: 8px;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: #efdbe5 transparent;
+}
+
+/* Individual statistic cards */
+
+#root .hgo-stats-panel .stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  gap: 4px;
+
+  width: 100%;
+  height: auto;
+  min-width: 0;
+  min-height: 64px;
+
+  padding: 9px 11px;
+
+  border: 1px solid #f2e7ed;
+  border-radius: 12px;
+
+  background: #fff;
+  box-shadow: none;
+
+  box-sizing: border-box;
+}
+
+/* ========================================
+   DAILY STATS — NUMBERS AND LABELS
+======================================== */
+
+#root .hgo-stats-panel .stat-number {
+  font-family: "Fraunces", serif;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #78566f;
+}
+
+#root .hgo-stats-panel .stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #987f90;
+  overflow-wrap: anywhere;
+}
+
+/* ========================================
+   DAILY STATS — PASTEL RAINBOW
+======================================== */
+
+#root .hgo-stats-panel .stat-card:nth-child(7n + 1) {
+  background: #ffe8e8; /* Red */
+}
+
+#root .hgo-stats-panel .stat-card:nth-child(7n + 2) {
+  background: #fff1e8; /* Orange */
+}
+
+#root .hgo-stats-panel .stat-card:nth-child(7n + 3) {
+  background: #fff7e8; /* Yellow */
+}
+
+#root .hgo-stats-panel .stat-card:nth-child(7n + 4) {
+  background: #eef8f2; /* Green */
+}
+
+#root .hgo-stats-panel .stat-card:nth-child(7n + 5) {
+  background: #edf5fc; /* Blue */
+}
+
+#root .hgo-stats-panel .stat-card:nth-child(7n + 6) {
+  background: #f1edfa; /* Purple */
+}
+
+#root .hgo-stats-panel .stat-card:nth-child(7n + 7) {
+  background: #fcebf2; /* Pink */
+}
+/* Compact layout */
+
+@media (max-width: 1100px) {
+  #root .hgo-stats-panel .stat-card {
+    padding: 8px;
+  }
+
+  #root .hgo-stats-panel .stat-number {
+    font-size: 18px;
+  }
+
+  #root .hgo-stats-panel .stat-label {
+    font-size: 9px;
+  }
+}
+
+/* ========================================
+   SIDEBAR — CLEAN JOURNAL REDESIGN
+======================================== */
+
+#root .hgo-shell > .hgo-empty-sidebar {
+  display: flex;
+  flex-direction: column;
+
+  padding: 26px 14px;
+
+  background: linear-gradient(
+    180deg,
+    #fff8fb 0%,
+    #ffffff 48%,
+    #fffafd 100%
+  );
+
+  border-right: 1px solid #f0e5eb;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: #efdbe5 transparent;
+}
+
+/* ========================================
+   BRANDING
+======================================== */
+
+#root .hgo-empty-sidebar .hgo-sidebar-brand {
+  width: 100%;
+  padding: 4px 0 0;
+
+  flex-shrink: 0;
+}
+
+/* Centre flower and title */
+
+#root .hgo-empty-sidebar .hgo-brand-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 10px;
+  padding: 0;
+
+  text-align: center;
+}
+
+/* Flower */
+
+#root .hgo-empty-sidebar .hgo-sidebar-flower {
+  display: grid;
+  place-items: center;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 16px;
+
+  background: #fce9f1;
+  border: 1px solid #f4dce7;
+
+  color: #c88ba8;
+  font-size: 27px;
+}
+
+/* Title */
+
+#root .hgo-empty-sidebar .hgo-sidebar-brand-text h1 {
+  margin: 0;
+
+  font-family: "Fraunces", serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+
+  color: #79566e;
+}
+
+/* Subtitle */
+
+#root .hgo-empty-sidebar .hgo-sidebar-brand-text p {
+  margin: 7px 0 0;
+
+  font-size: 10px;
+  font-style: italic;
+  line-height: 1.5;
+
+  color: #b59aaa;
+}
+
+/* ========================================
+   DATE CARD
+======================================== */
+
+#root .hgo-empty-sidebar .hgo-date-card {
+  width: 100%;
+
+  margin-top: 25px;
+  padding: 13px 10px;
+
+  background: white;
+
+  border: 1px solid #f1e3ea;
+  border-radius: 14px;
+
+  box-shadow: 0 4px 15px rgba(117, 72, 96, 0.025);
+}
+
+/* Weekday */
+
+#root .hgo-empty-sidebar .hgo-date-weekday {
+  font-family: "Fraunces", serif;
+  font-size: 17px;
+  font-weight: 600;
+
+  color: #79566e;
+}
+
+/* Full date */
+
+#root .hgo-empty-sidebar .hgo-date-full {
+  font-size: 10px;
+  color: #b39aaa;
+}
+
+/* Today indicator */
+
+#root .hgo-empty-sidebar .hgo-date-status {
+  height: 24px;
+
+  font-size: 10px;
+  color: #c594ad;
+}
+
+/* Divider */
+
+#root .hgo-empty-sidebar .hgo-sidebar-divider {
+  height: 1px;
+
+  margin: 14px 5px 0;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    #ecd9e3,
+    transparent
+  );
+}
+
+/* ========================================
+   VIBE CHECK — SPACING
+======================================== */
+
+#root .hgo-shell > .hgo-empty-sidebar .moodboard {
+  margin-top: auto;
+  margin-bottom: auto;
+
+  flex-shrink: 0;
+
+  border: 1px solid #f0e3ea;
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow: 0 8px 30px rgba(79, 54, 69, 0.035);
+}
+
+/* Shorter screens */
+
+@media (max-height: 760px) {
+  #root .hgo-shell > .hgo-empty-sidebar {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  #root .hgo-shell > .hgo-empty-sidebar .moodboard {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
 }

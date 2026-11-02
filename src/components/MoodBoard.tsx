@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
-import { Heart, X } from "lucide-react";
+import type { PointerEvent as ReactPointerEvent, KeyboardEvent } from "react";
+import { Heart } from "lucide-react";
 import "./MoodBoard.css";
+
+/* ========================================
+   TYPES
+======================================== */
 
 type Mood =
   | "amazing"
@@ -15,6 +20,7 @@ type Energy = "low" | "medium" | "high";
 type MoodEntry = {
   mood?: Mood;
   energy?: Energy;
+  energyPercent?: number;
   note?: string;
 };
 
@@ -24,6 +30,10 @@ type MoodboardProps = {
   selectedDate: Date;
 };
 
+/* ========================================
+   MOOD OPTIONS
+======================================== */
+
 const moods: {
   value: Mood;
   label: string;
@@ -31,33 +41,15 @@ const moods: {
 }[] = [
   { value: "amazing", label: "mogging", symbol: "✦" },
   { value: "good", label: "absolutely based", symbol: "♡" },
-  { value: "calm", label: "unbothered queen", symbol: "☁" },
+  { value: "calm", label: "unbothered queen", symbol: "🍃" },
   { value: "meh", label: "mid", symbol: "⋯" },
-  { value: "anxious", label: "negative aura", symbol: "⚡" },
-  { value: "rough", label: "chopped asf", symbol: "☂" }
+  { value: "anxious", label: "negative aura", symbol: "⚡︎" },
+  { value: "rough", label: "cooked", symbol: "☁" }
 ];
 
-const energyLevels: {
-  value: Energy;
-  label: string;
-  description: string;
-}[] = [
-  {
-    value: "low",
-    label: "Low",
-    description: "Cooked"
-  },
-  {
-    value: "medium",
-    label: "Medium",
-    description: "6-7"
-  },
-  {
-    value: "high",
-    label: "High",
-    description: "Unstoppable"
-  }
-];
+/* ========================================
+   STORAGE
+======================================== */
 
 function dateKey(date: Date) {
   return [
@@ -81,22 +73,68 @@ function loadMoods(): MoodHistory {
   }
 }
 
+/* ========================================
+   BATTERY HELPERS
+======================================== */
+
+function clamp(value: number) {
+  return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+function getBatteryPercent(entry: MoodEntry): number | null {
+  if (typeof entry.energyPercent === "number") {
+    return clamp(entry.energyPercent);
+  }
+
+  // Convert previously saved energy levels
+  switch (entry.energy) {
+    case "low":
+      return 20;
+    case "medium":
+      return 50;
+    case "high":
+      return 80;
+    default:
+      return null;
+  }
+}
+
+function getEnergyLevel(percent: number): Energy {
+  if (percent < 34) return "low";
+  if (percent < 67) return "medium";
+  return "high";
+}
+
+function getEnergyLabel(percent: number) {
+  if (percent < 34) return "Cooked";
+  if (percent < 67) return "6-7";
+  return "Unstoppable";
+}
+
+/* ========================================
+   COMPONENT
+======================================== */
+
 function Moodboard({ selectedDate }: MoodboardProps) {
   const [entries, setEntries] = useState<MoodHistory>(loadMoods);
 
   const selectedKey = dateKey(selectedDate);
-
   const entry = entries[selectedKey] ?? {};
 
-  // Save everything automatically
-    useEffect(() => {
-        localStorage.setItem(
-            "hot-girl-moodboard",
-            JSON.stringify(entries)
-        );
+  const batteryPercent = getBatteryPercent(entry);
 
-        window.dispatchEvent(new Event("hgo-mood-updated"));
-    }, [entries]);
+  /* Save automatically */
+
+  useEffect(() => {
+    localStorage.setItem(
+      "hot-girl-moodboard",
+      JSON.stringify(entries)
+    );
+
+    window.dispatchEvent(new Event("hgo-mood-updated"));
+  }, [entries]);
+
+  /* Update selected date's entry */
 
   function updateEntry(changes: Partial<MoodEntry>) {
     setEntries(previous => ({
@@ -108,44 +146,102 @@ function Moodboard({ selectedDate }: MoodboardProps) {
     }));
   }
 
+  /* Select or deselect mood */
+
   function selectMood(mood: Mood) {
     updateEntry({
       mood: entry.mood === mood ? undefined : mood
     });
   }
 
-  function selectEnergy(energy: Energy) {
+  /* Set battery percentage */
+
+  function setBatteryLevel(percent: number) {
+    const value = clamp(percent);
+
     updateEntry({
-      energy: entry.energy === energy ? undefined : energy
+      energyPercent: value,
+      energy: getEnergyLevel(value)
     });
   }
 
-  function clearDay() {
-    setEntries(previous => {
-      const updated = { ...previous };
-      delete updated[selectedKey];
-      return updated;
-    });
+  /* ========================================
+     VERTICAL BATTERY DRAGGING
+  ======================================== */
+
+  function updateBatteryFromPointer(
+    event: ReactPointerEvent<HTMLDivElement>
+  ) {
+    const rect = event.currentTarget.getBoundingClientRect();
+
+    // Bottom = 0%, top = 100%
+    const position = rect.bottom - event.clientY;
+
+    const percent = clamp(
+      (position / rect.height) * 100
+    );
+
+    setBatteryLevel(percent);
   }
 
-  const hasEntry = Boolean(
-    entry.mood ||
-    entry.energy ||
-    entry.note?.trim()
-  );
+  function handlePointerDown(
+    event: ReactPointerEvent<HTMLDivElement>
+  ) {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    updateBatteryFromPointer(event);
+  }
 
-  const dateLabel = selectedDate.toLocaleDateString("en-CA", {
-    weekday: "long",
-    month: "long",
-    day: "numeric"
-  });
+  function handlePointerMove(
+    event: ReactPointerEvent<HTMLDivElement>
+  ) {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      updateBatteryFromPointer(event);
+    }
+  }
+
+  /* Keyboard accessibility */
+
+  function handleBatteryKeyDown(
+    event: KeyboardEvent<HTMLDivElement>
+  ) {
+    const current = batteryPercent ?? 0;
+
+    switch (event.key) {
+      case "ArrowUp":
+      case "ArrowRight":
+        event.preventDefault();
+        setBatteryLevel(current + 5);
+        break;
+
+      case "ArrowDown":
+      case "ArrowLeft":
+        event.preventDefault();
+        setBatteryLevel(current - 5);
+        break;
+
+      case "Home":
+        event.preventDefault();
+        setBatteryLevel(0);
+        break;
+
+      case "End":
+        event.preventDefault();
+        setBatteryLevel(100);
+        break;
+    }
+  }
+
+  /* ========================================
+     RENDER
+  ======================================== */
 
   return (
     <section className="moodboard">
 
+      {/* Header */}
+
       <div className="moodboard-header">
         <div>
-
           <h2>
             Vibe Check <span>♡</span>
           </h2>
@@ -156,105 +252,69 @@ function Moodboard({ selectedDate }: MoodboardProps) {
         </div>
 
         <div className="moodboard-icon">
-          <Heart size={21} />
+          <Heart size={18} />
         </div>
       </div>
 
-      {/* Mood */}
+      {/* Six mood options */}
 
-      <div className="moodboard-section">
-
-        <div className="moodboard-moods">
-          {moods.map(mood => (
-            <button
-              type="button"
-              key={mood.value}
-              className={`moodboard-mood mood-${mood.value} ${
-                entry.mood === mood.value ? "selected" : ""
+      <div className="moodboard-moods">
+        {moods.map(mood => (
+          <button
+            type="button"
+            key={mood.value}
+            className={`moodboard-mood mood-${mood.value} ${entry.mood === mood.value ? "selected" : ""
               }`}
-              onClick={() => selectMood(mood.value)}
-              aria-pressed={entry.mood === mood.value}
-            >
-              <span className="moodboard-mood-symbol">
-                {mood.symbol}
-              </span>
+            onClick={() => selectMood(mood.value)}
+            aria-pressed={entry.mood === mood.value}
+          >
+            <span className="moodboard-mood-symbol">
+              {mood.symbol}
+            </span>
 
-              <span className="moodboard-mood-label">
-                {mood.label}
-              </span>
-            </button>
-          ))}
-        </div>
+            <span className="moodboard-mood-label">
+              {mood.label}
+            </span>
+          </button>
+        ))}
       </div>
 
-      {/* Energy */}
+      {/* Vertical battery */}
 
-      <div className="moodboard-section">
-        <div className="moodboard-section-heading">
-          <h3 className="battery-heading">
-            Bat
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
+      {/* Vertical battery */}
+
+      <div className="moodboard-battery-section">
+        <div className="moodboard-battery-area">
+
+          <div className="moodboard-battery">
+
+            <div className="battery-terminal" />
+
+            <div
+              className="battery-body"
+              role="slider"
+              tabIndex={0}
+              aria-label="Energy level"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={batteryPercent ?? 0}
+              aria-orientation="vertical"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onKeyDown={handleBatteryKeyDown}
             >
-              <rect x="2" y="7" width="18" height="10" rx="2" />
-              <path d="M22 11v2" />
-              <path d="M6 10h8v4H6z" fill="currentColor" stroke="none" />
-            </svg>
-          </h3>
-          <span>OPTIONAL</span>
-        </div>
+              <div
+                className="battery-fill"
+                style={{
+                  height: `${batteryPercent ?? 0}%`
+                }}
+              />
+            </div>
 
-        <div className="moodboard-energy">
-          {energyLevels.map(level => (
-            <button
-              type="button"
-              key={level.value}
-              className={`moodboard-energy-option ${
-                entry.energy === level.value ? "selected" : ""
-              }`}
-              onClick={() => selectEnergy(level.value)}
-              aria-pressed={entry.energy === level.value}
-            >
-              <strong>{level.label}</strong>
+          </div>
 
-              <small>{level.description}</small>
-            </button>
-          ))}
         </div>
       </div>
-
-      {/* Notes */}
-
-      <div className="moodboard-section">
-        <div className="moodboard-section-heading">
-          <h3>Trauma Dump</h3>
-          <span>OPTIONAL</span>
-        </div>
-
-        <textarea
-          className="moodboard-note"
-          rows={3}
-          placeholder="say your piece, diva"
-          value={entry.note ?? ""}
-          onChange={event =>
-            updateEntry({ note: event.target.value })
-          }
-        />
-      </div>
-
-      <p className="moodboard-footer">
-        {hasEntry
-          ? "certified yapper ♡"
-          : "chat i'm going non-verbal"}
-      </p>
 
     </section>
   );

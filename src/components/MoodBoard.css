@@ -1,56 +1,49 @@
 /* ========================================
-   VIBE CHECK — RESPONSIVE CARD CONTENT
-   Change the card width / height in index.css.
-   Container queries adapt the contents to THIS
-   card's size (not the browser window).
+   VIBE CHECK — SIDEBAR DESIGN
 ======================================== */
 
 .moodboard {
-  container-name: hgo-moodboard;
-  container-type: size;
+  container-type: inline-size;
 
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  row-gap: 12px;
 
+  width: 100%;
   min-width: 0;
-  min-height: 0;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 16px;
+  padding: 12px 10px;
 
-  background: #fffdfd;
+  background: #fffafd;
   border: 1px solid #f1e5eb;
-  border-radius: 20px;
+  border-radius: 14px;
+
+  box-sizing: border-box;
 }
+
 
 /* ========================================
    HEADER
 ======================================== */
 
 .moodboard-header {
+  grid-column: 1 / -1;
+
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  min-width: 0;
-}
-
-.moodboard-eyebrow {
-  margin: 0 0 5px;
-  color: #ba8da5;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 1.3px;
+  align-items: center;
+  gap: 6px;
 }
 
 .moodboard-header h2 {
   margin: 0;
-  color: #644c60;
+
   font-family: "Fraunces", serif;
-  font-size: 23px;
+  font-size: 17px;
   font-weight: 600;
-  line-height: 1.15;
+
+  color: #73506a;
 }
 
 .moodboard-header h2 span {
@@ -58,311 +51,290 @@
 }
 
 .moodboard-description {
-  margin: 5px 0 0;
-  color: #a2909d;
-  font-size: 11px;
-  line-height: 1.35;
+  margin: 3px 0 0;
+
+  font-size: 10px;
+  color: #b49aaa;
 }
 
 .moodboard-icon {
   display: grid;
   place-items: center;
+
+  width: 27px;
+  height: 27px;
   flex-shrink: 0;
-  width: 35px;
-  height: 35px;
-  border-radius: 11px;
+
+  border-radius: 9px;
   background: #f9eaf2;
   color: #bd83a2;
 }
 
-/* ========================================
-   SELECTED DATE
-======================================== */
-
-.moodboard-date {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  margin-top: 12px;
-  padding: 8px 10px;
-  background: #fcf7fa;
-  border-radius: 10px;
-}
-
-.moodboard-date > span {
-  min-width: 0;
-  color: #94788b;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.moodboard-clear {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-  border: none;
-  background: transparent;
-  color: #b88da5;
-  font-size: 10px;
-  cursor: pointer;
-}
-
-.moodboard-clear:hover {
-  color: #985675;
-}
 
 /* ========================================
-   SECTIONS
-======================================== */
-
-.moodboard-section {
-  min-width: 0;
-  margin-top: 12px;
-}
-
-.moodboard-section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 7px;
-}
-
-.moodboard-section-heading h3 {
-  margin: 0;
-  color: #725a6e;
-  font-family: "Fraunces", serif;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.moodboard-section-heading > span {
-  color: #c2acba;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-}
-
-/* ========================================
-   MOOD BUTTONS
+   MOOD LIST — VERTICAL
 ======================================== */
 
 .moodboard-moods {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  width: 100%;
   min-width: 0;
 }
+
+
+/* ========================================
+   INDIVIDUAL MOOD
+======================================== */
 
 .moodboard-mood {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
+  justify-content: flex-start;
+
+  gap: 7px;
+
+  width: 100%;
   min-width: 0;
-  min-height: 58px;
-  padding: 7px 4px;
-  border: 1px solid #f0e6ec;
-  border-radius: 11px;
-  background: #fdf9fb;
-  color: #9c8393;
+  min-height: 30px;
+
+  padding: 5px 7px;
+
+  border: 1px solid transparent;
+  border-radius: 8px;
+
   cursor: pointer;
-  text-align: center;
-  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .moodboard-mood:hover {
-  transform: translateY(-2px);
+  transform: translateX(2px);
   border-color: #e4c4d4;
 }
 
 .moodboard-mood.selected {
-  border: 2px solid #bb7b9e;
-  box-shadow: 0 0 0 2px #f8e5ef;
-  color: #995d7e;
+  border-color: #bb7b9e;
+  box-shadow: inset 0 0 0 1px #bb7b9e;
 }
 
+
+/* ========================================
+   MOOD SYMBOLS
+======================================== */
+
 .moodboard-mood-symbol {
-  font-family: "Fraunces", serif;
-  font-size: 21px;
+  display: grid;
+  place-items: center;
+
+  width: 18px;
+  flex-shrink: 0;
+
+  font-family: "Segoe UI Symbol", serif;
+  font-size: 18px;
   line-height: 1;
 }
 
 .moodboard-mood-label {
+  min-width: 0;
+
   font-size: 10px;
   font-weight: 700;
   line-height: 1.2;
+
+  text-align: left;
+  color: #8f7284;
+
   overflow-wrap: anywhere;
 }
 
-.moodboard-mood.mood-amazing { background: #fff5e9; }
-.moodboard-mood.mood-good { background: #fff0f5; }
-.moodboard-mood.mood-calm { background: #f0f6fc; }
-.moodboard-mood.mood-meh { background: #f8f5f8; }
-.moodboard-mood.mood-anxious { background: #f5f0fb; }
-.moodboard-mood.mood-rough { background: #edf3f8; }
-
 /* ========================================
-   ENERGY BUTTONS
+   PASTEL MOOD COLOURS
+   Colours controlled in index.css
 ======================================== */
 
-.battery-heading {
+.moodboard-mood {
+  background: color-mix(
+    in srgb,
+    var(--mood-light) 35%,
+    white
+  );
+}
+
+.moodboard-mood-symbol {
+  color: var(--mood-dark);
+}
+
+.moodboard-mood.selected {
+  border-color: var(--mood-dark);
+  box-shadow: inset 0 0 0 1px var(--mood-dark);
+}
+
+
+/* ========================================
+   BATTERY — RIGHT SIDE
+======================================== */
+
+.moodboard-battery-section {
   display: flex;
-  align-items: center;
-  gap: 8px;
-}
+  justify-content: center;
+  align-items: stretch;
 
-.battery-heading svg {
-  flex-shrink: 0;
-  color: #d99ab8;
-}
-
-.moodboard-energy {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 7px;
+  width: 100%;
   min-width: 0;
+  min-height: 0;
+
+  padding: 0;
+  margin: 0;
+
+  border: none;
 }
 
-.moodboard-energy-option {
+.moodboard-battery-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.moodboard-battery-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 70%;
+  min-height: 0;
+}
+
+.moodboard-battery {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
-  min-width: 0;
-  min-height: 42px;
-  padding: 6px 4px;
-  border: 1px solid #f0e6ec;
-  border-radius: 10px;
-  background: #fffbfd;
-  color: #9c8393;
-  cursor: pointer;
-  text-align: center;
-}
 
-.moodboard-energy-option strong {
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.moodboard-energy-option small {
-  color: #b3a0ad;
-  font-size: 9px;
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-}
-
-.moodboard-energy-option:hover { border-color: #e5c3d5; }
-
-.moodboard-energy-option.selected {
-  border: 2px solid #c48ba9;
-  background: #faedf4;
-  color: #985f7e;
-}
-
-/* ========================================
-   JOURNAL + FOOTER
-======================================== */
-
-.moodboard-note {
-  display: block;
   width: 100%;
-  min-width: 0;
-  min-height: 48px;
-  height: 65px;
-  padding: 9px 10px;
-  border: 1px solid #f0e3eb;
-  border-radius: 10px;
-  outline: none;
-  resize: vertical;
-  background: #fffbfd;
-  color: #725a6e;
-  font-family: "DM Sans", sans-serif;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.moodboard-note::placeholder { color: #beaaba; }
-
-.moodboard-note:focus {
-  border-color: #cd9db8;
-  box-shadow: 0 0 0 3px #faedf4;
-}
-
-.moodboard-footer {
-  margin: 12px 0 0;
-  padding-top: 9px;
-  border-top: 1px solid #f4eaf0;
-  color: #b19baa;
-  font-size: 10px;
-  text-align: center;
+  height: 100%;
+  min-height: 0;
 }
 
 /* ========================================
-   RESPONSIVE TO THE MOODBOARD CARD ITSELF
+   BATTERY TERMINAL
 ======================================== */
 
-/* Wide card: show all six moods in one row. */
-@container hgo-moodboard (min-width: 455px) {
-  .moodboard-moods {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+.battery-terminal {
+  width: 18px;
+  height: 6px;
+
+  flex-shrink: 0;
+
+  background: #a5a6d8;
+  border-radius: 4px 4px 0 0;
+}
+
+
+/* ========================================
+   VERTICAL BATTERY BODY
+======================================== */
+
+.battery-body {
+  position: relative;
+
+  width: 32px;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+
+  overflow: hidden;
+
+  border: 2px solid #a5a6d8;
+  border-radius: 9px;
+
+  background: #f0effb;
+
+  cursor: ns-resize;
+  touch-action: none;
+
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.battery-body:hover {
+  border-color: #9293cb;
+}
+
+.battery-body:focus-visible {
+  outline: 3px solid #dcd4fa;
+  outline-offset: 2px;
+}
+
+/* ========================================
+   RESPONSIVE — NARROW COMPONENT
+======================================== */
+
+@container (max-width: 185px) {
+
+  .moodboard-mood {
+    padding: 4px 5px;
+    gap: 5px;
+  }
+
+  .moodboard-mood-symbol {
+    font-size: 16px;
+    width: 16px;
+  }
+
+  .moodboard-mood-label {
+    font-size: 9px;
+  }
+
+  .battery-body {
+    width: 27px;
   }
 }
 
-/* Narrow card: reduce typography and controls. */
-@container hgo-moodboard (max-width: 415px) {
-  .moodboard-header h2 { font-size: 20px; }
-  .moodboard-description { font-size: 10px; }
-  .moodboard-icon { width: 30px; height: 30px; }
-  .moodboard-mood { min-height: 52px; padding: 5px 3px; }
-  .moodboard-mood-symbol { font-size: 18px; }
-  .moodboard-mood-label { font-size: 9px; }
-  .moodboard-section-heading h3 { font-size: 14px; }
+
+/* ========================================
+   RESPONSIVE — VERY NARROW COMPONENT
+======================================== */
+
+@container (max-width: 140px) {
+
+  .moodboard-icon {
+    display: none;
+  }
+
+  .moodboard-mood-label {
+    font-size: 8px;
+  }
 }
 
-/* Very narrow card: a readable two-column mood picker. */
-@container hgo-moodboard (max-width: 285px) {
-  .moodboard-header { gap: 5px; }
-  .moodboard-header h2 { font-size: 18px; }
-  .moodboard-icon { display: none; }
-  .moodboard-moods { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .moodboard-energy { gap: 4px; }
-  .moodboard-energy-option strong { font-size: 10px; }
-  .moodboard-energy-option small { font-size: 8px; }
+/* ========================================
+   BATTERY COLOUR — RESPONDS TO MOOD
+======================================== */
+
+.battery-fill {
+  position: absolute !important;
+
+  top: auto !important;
+  bottom: 0 !important;
+  left: 0;
+  right: 0;
+
+  width: 100%;
+
+  background: linear-gradient(
+    to top,
+    var(--mood-dark),
+    var(--mood-light)
+  );
+
+  transform: none !important;
+  border-radius: 5px 5px 0 0;
+  pointer-events: none;
 }
 
-/* Short card: compress spacing, icons, and journal. */
-@container hgo-moodboard (max-height: 400px) {
-  .moodboard-eyebrow { margin-bottom: 3px; }
-  .moodboard-header h2 { font-size: 20px; }
-  .moodboard-description { margin-top: 3px; font-size: 10px; }
-  .moodboard-date { margin-top: 8px; padding: 6px 8px; }
-  .moodboard-section { margin-top: 8px; }
-  .moodboard-section-heading { margin-bottom: 5px; }
-  .moodboard-section-heading h3 { font-size: 13px; }
-  .moodboard-mood { min-height: 48px; gap: 2px; padding: 4px 3px; }
-  .moodboard-mood-symbol { font-size: 18px; }
-  .moodboard-mood-label { font-size: 9px; }
-  .moodboard-energy-option { min-height: 34px; gap: 2px; padding: 4px; }
-  .moodboard-note { min-height: 38px; height: 45px; padding: 6px 8px; }
-  .moodboard-footer { margin-top: 8px; padding-top: 6px; }
-}
-
-/* Very short card: make the essential controls as compact as possible. */
-@container hgo-moodboard (max-height: 310px) {
-  .moodboard-eyebrow { display: none; }
-  .moodboard-description { display: none; }
-  .moodboard-icon { width: 26px; height: 26px; }
-  .moodboard-date { margin-top: 6px; }
-  .moodboard-section { margin-top: 6px; }
-  .moodboard-section-heading { margin-bottom: 4px; }
-  .moodboard-mood { min-height: 39px; }
-  .moodboard-energy-option { min-height: 30px; }
-  .moodboard-note { min-height: 34px; height: 38px; }
-  .moodboard-footer { margin-top: 6px; }
-}
