@@ -1,184 +1,250 @@
-export const complimentBank: Record<string, string[]> = {
+export const celebrationLines: Record<string, readonly string[]> = {
   General: [
-    "The lore has been updated. Historians are shaking.",
-    "Canon event, but make it mundane.",
-    "Evidence submitted to the hot girl committee.",
-    "Not the side quest having a paper trail.",
-    "Another entry in the girlhood cinematic universe.",
-    "Chat, she actually did a thing.",
-    "Being a person? Kinda ate.",
-    "The receipts have entered the chat.",
-    "This one's going in the archives, bestie.",
-    "Side quest completed. No main quest required.",
-    "Character development, but with better fonts.",
-    "Hot girl documentation department stays employed.",
-    "Screenshotting this for the plot.",
-    "Your future self has receipts. You're welcome.",
-    "The plot moved forward by one (1) thing.",
-    "Certified lore, no fact-checkers needed.",
-    "The personal wiki just got juicier.",
-    "That's on the record now, diva.",
-    "Another chapter of Whatever This Is.",
-    "No one asked, but the archives demanded proof.",
-    "Recorded with extreme girly precision.",
-    "Did it for the plot. Logged it for the record.",
-    "Lowkey iconic. Highkey documented.",
-    "Adding this to the personal canon.",
-    "Girlhood admin: operational.",
-    "Plot armor? No. Plot documentation.",
-    "Is it a side quest if there's a receipt?",
-    "Your life, your rules, your weird little database.",
-    "For legal reasons, the plot is still plotting."
+    "chat we actually did something",
+    "rare footage of me functioning",
+    "the allegations are true",
+    "bro actually locked in",
+    "certified W",
+    "wait this is kinda tuff",
+    "the aura gains are real",
+    "poggers behaviour",
+    "we're so back",
+    "the NPC gained free will",
+    "those who know",
+    "bro might actually be cooking",
+    "this is NOT a drill",
+    "the haters are in shambles",
+    "another W for the collection",
+    "the simulation is getting interesting"
   ],
+
   Avery: [
-    "Her royal fluffness acknowledges your service.",
-    "Avery's personal assistant has clocked in.",
-    "The dog has requested a five-star review.",
-    "CEO of Taking Avery Outside.",
-    "Her tail would like to thank the academy.",
-    "Big Dog has entered her enrichment era.",
-    "Avery's PR team approves this message.",
-    "Fluff management is an important department.",
-    "Your supervisor has four paws and high standards.",
-    "Unpaid internship at Avery Incorporated continues.",
-    "Avery is the main character; you're the chauffeur.",
-    "The girlies (you and the dog) stay booked.",
-    "Canine quality assurance: passed.",
-    "The dog mom allegations are true.",
-    "Her majesty requires regular side quests.",
-    "This has been added to Avery's royal records.",
-    "Avery remains the world's fluffiest line manager.",
-    "Someone promote you to Senior Dog Mom.",
-    "Mother has served the canine constituency.",
-    "Barketing department says it ate.",
-    "The leash industry thanks you for your service.",
-    "Avery's little paws are booked and busy.",
-    "Queen Avery's activities have been documented."
+    "the unemployed roommate is thriving",
+    "Avery stays mogging",
+    "the creature has been serviced",
+    "dog maintenance goes crazy",
+    "the floof is looking tuff",
+    "Avery's aura is generational",
+    "the fur distribution system is thriving",
+    "certified good girl activities",
+    "the beast has been appeased",
+    "bro is literally just a dog",
+    "the yapper has been attended to",
+    "Avery's PR team is glazing",
+    "the canine allegations are adorable",
+    "the creature remains undefeated",
+    "another W for the unemployed",
+    "the dog economy is booming"
   ],
+
   Movement: [
-    "Touching grass, unironically?",
-    "Cardio has entered the group chat.",
-    "The legs have received their patch update.",
-    "The outside world got a cameo today.",
-    "Gym girl lore is expanding.",
-    "Leg day? In this economy?",
-    "Human movement DLC installed.",
-    "Your muscles have been notified.",
-    "Certified outside participant.",
-    "The sidewalks remember your name.",
-    "Girl went places using her own two feet.",
-    "Movement era, no subscription required.",
-    "Real-life fast travel, except it's walking.",
-    "The cardio allegations are beating the case.",
-    "She moved. She slayed. She logged.",
-    "Somebody tell the sneakers they're employed.",
-    "The endorphins might file a guest appearance.",
-    "Peak hot girl side quest behavior.",
-    "Not the pavement getting lore.",
-    "Running on girl power and questionable playlists.",
-    "You have successfully interacted with the outdoors."
+    "bro voluntarily moved",
+    "the cardio allegations are true",
+    "legs are NOT beating the employment allegations",
+    "the pavement got mogged",
+    "IRL movement speed increased",
+    "the stamina stat is looking tuff",
+    "bro is speedrunning cardiovascular health",
+    "the physical activity is actually poggers",
+    "the couch lost custody",
+    "movementmaxxing goes crazy",
+    "the step count is cooking",
+    "the fitness NPC has spawned",
+    "the grass has been touched",
+    "the legs have entered ranked",
+    "bro unlocked the walking animation",
+    "the cardiovascular system is glazing"
   ],
+
   Home: [
-    "The dishes have been humbled.",
-    "Domestic diva arc unlocked.",
-    "The apartment is getting its redemption edit.",
-    "Dust particles hate to see you coming.",
-    "The couch is now part of the clean-girl cinematic universe.",
-    "This household has receipts, literally.",
-    "A mopless slay is still a slay.",
-    "The apartment group chat is impressed.",
-    "The vacuum has clocked in and clocked out.",
-    "Home maintenance, but make it hot.",
-    "The clutter has received a formal notice.",
-    "Laundry and lore, two pillars of civilization.",
-    "Cleaning side quest? Absolutely canon.",
-    "The surfaces have been perceived and addressed.",
-    "The fridge fears your potential.",
-    "Furniture is shook. In a good way.",
-    "Domesticity got a pastel rebrand.",
-    "Your apartment just got a software update.",
-    "The kitchen has been respectfully handled.",
-    "The chores didn't know they were facing a final boss.",
-    "Clean queen cinematic universe expands.",
-    "Things were put away. Society may continue."
+    "the habitat is getting mogged",
+    "the dust bunnies got absolutely cooked",
+    "domestic LARPing goes crazy",
+    "the clutter took a generational L",
+    "bro is actually maintaining a residence",
+    "the cleaning allegations are true",
+    "the habitat is looking tuff",
+    "the grime got ratioed",
+    "the vacuum has entered its villain arc",
+    "the domestic NPC is locked in",
+    "the dust got sent to the backrooms",
+    "the apartment aura just increased",
+    "the dishes got humbled",
+    "the bacteria are in shambles",
+    "the cleaning meta is undefeated",
+    "the household is NOT cooked"
   ],
+
   "Self-care": [
-    "Princess maintenance has been documented.",
-    "Skincare lore is legally binding.",
-    "The moisturized and unbothered agenda continues.",
-    "The self-care department is open, bestie.",
-    "You're literally in your being-nice-to-yourself era.",
-    "Hot girl maintenance, no appointment required.",
-    "The hair care cinematic universe has new footage.",
-    "A tiny spa day has entered the chat.",
-    "This moment is sponsored by being a person.",
-    "Soft life behavior, your honor.",
-    "Self-care, but not as a mandatory side quest.",
-    "The girl is tending to the girl.",
-    "A little TLC? Absolutely canon.",
-    "Pampering yourself is very main character coded.",
-    "The bath products have requested more screen time.",
-    "Care and kindness? In this economy?",
-    "Consider this your official soft-life receipt.",
-    "No hustle. Just a girl doing girl things.",
-    "The self-care allegations are confirmed.",
-    "This is a gentle little plot development.",
-    "Skin and soul, respectfully maintained.",
-    "The princess preservation program continues."
+    "looksmaxxing allegations confirmed",
+    "the face card stays undefeated",
+    "the maintenance is maintenance-ing",
+    "bro invested in the character build",
+    "the self-care aura is immaculate",
+    "the skin is getting glazed",
+    "the glow-up is actually tuff",
+    "the princess LARP continues",
+    "the body got the premium treatment",
+    "the self-maintenance DLC is installed",
+    "bro is mogging the previous build",
+    "the face economy is booming",
+    "the skincare department is locked in",
+    "the mirror is about to start glazing",
+    "the baddie maintenance is operational",
+    "the character customization goes crazy"
   ],
+
   Fun: [
-    "Fun was had. Documented for legal reasons.",
-    "The side quest was the main quest all along.",
-    "The serotonin department has clocked in.",
-    "A hobby? In this economy? Iconic.",
-    "Doing things for joy? Groundbreaking.",
-    "The plot took a fun little detour.",
-    "The girlies yearn for enrichment.",
-    "The leisure allegations are true.",
-    "Recreational lore unlocked.",
-    "This episode has a filler arc and we love it.",
-    "Dopamine DLC successfully installed.",
-    "World-building, but it's literally your life.",
-    "Fun is a valid genre of lore.",
-    "Joy entered the group chat and was welcomed.",
-    "It's giving enrichment time.",
-    "A little silly goose activity? Correct.",
-    "The plot twist is she enjoyed herself.",
-    "Side quest of joy: canon.",
-    "The controller/paintbrush/book understood the assignment.",
-    "No productivity plotline necessary.",
-    "That's a lore drop with good vibes.",
-    "Certified main character intermission."
+    "the dopamine was absolutely cooking",
+    "enrichment time goes crazy",
+    "bro remembered how to have fun",
+    "certified poggers moment",
+    "the serotonin allegations are true",
+    "the vibes are looking tuff",
+    "the fun economy is booming",
+    "the NPC discovered recreational activities",
+    "the entertainment DLC was worth it",
+    "the joymaxxing is generational",
+    "the brain got its enrichment",
+    "bro is actually enjoying the simulation",
+    "the happiness stat got buffed",
+    "the silliness has been deployed",
+    "the recreational LARP was successful",
+    "the dopamine receptors are glazing"
   ],
+
   "Life admin": [
-    "The inbox has been legally perceived.",
-    "One fewer tab screaming in the brain browser.",
-    "Administrative hot girl activities are underway.",
-    "Adult paperwork? Can't believe you have lore about this.",
-    "The email has been handled. Cinema.",
-    "Life admin has received a cease and desist.",
-    "You have successfully negotiated with adulthood.",
-    "The bureaucracy arc got one scene shorter.",
-    "Your brain has closed a tab. Historic.",
-    "The errands cinematic universe continues.",
-    "Inbox boss fight: survived.",
-    "Corporate girly (unaffiliated with corporations).",
-    "Admin side quest filed under 'handled'.",
-    "The paperwork did not win today.",
-    "Email? Sent. Lore? Expanded.",
-    "This message is brought to you by the tab-closing department."
+    "the bureaucracy got mogged",
+    "bro defeated the paperwork boss",
+    "the administrative allegations are true",
+    "the frontal lobe actually locked in",
+    "the government NPC got humbled",
+    "the paperwork took a generational L",
+    "bro survived the civilian simulator",
+    "the executive function is cooking",
+    "the admin boss got absolutely folded",
+    "the adulting LARP is getting serious",
+    "the paperwork is NOT beating the allegations",
+    "the braincells actually collaborated",
+    "the bureaucracy skill issue is crazy",
+    "the civilian duties have been mogged",
+    "the responsible citizen cosplay goes crazy",
+    "the admin department is so back"
   ]
 };
 
-// No recently used line repeats, even across refreshes.
-export function randomCompliment(category: string) {
-  const pool = [...complimentBank.General, ...(complimentBank[category] ?? [])];
-  const key = "hgo-recent-compliments";
-  let recent: string[] = [];
-  try { recent = JSON.parse(localStorage.getItem(key) || "[]"); } catch { /* ignore */ }
-  const options = pool.filter(line => !recent.includes(line));
-  const choices = options.length ? options : pool;
-  const chosen = choices[Math.floor(Math.random() * choices.length)];
-  try { localStorage.setItem(key, JSON.stringify([...recent, chosen].slice(-40))); } catch { /* ignore */ }
+const RECENT_KEY = "hgo-recent-celebration-lines";
+const HISTORY_LIMIT = 200;
+
+type CelebrationHistory = Record<string, string[]>;
+
+/**
+ * Read the saved rotation history.
+ *
+ * Supports the old string[] format and the new
+ * category-based history format.
+ */
+function readHistory(): CelebrationHistory {
+  try {
+    const raw: unknown = JSON.parse(
+      localStorage.getItem(RECENT_KEY) ?? "{}"
+    );
+
+    if (Array.isArray(raw)) {
+      const history: CelebrationHistory = {};
+
+      for (const entry of raw) {
+        if (typeof entry !== "string") continue;
+
+        // Old entries may contain "{action} — ".
+        const cleaned = entry.replace(/^\{action\}\s*—\s*/, "");
+        const separator = cleaned.indexOf(":");
+
+        if (separator === -1) continue;
+
+        const category = cleaned.slice(0, separator);
+        const line = cleaned.slice(separator + 1);
+
+        if (!category || !line) continue;
+
+        (history[category] ??= []).push(line);
+      }
+
+      return history;
+    }
+
+    if (raw && typeof raw === "object") {
+      const history: CelebrationHistory = {};
+
+      for (const [category, entries] of Object.entries(raw)) {
+        if (!Array.isArray(entries)) continue;
+
+        history[category] = entries.filter(
+          (entry): entry is string => typeof entry === "string"
+        );
+      }
+
+      return history;
+    }
+  } catch {
+    // Invalid or unavailable storage starts a fresh rotation.
+  }
+
+  return {};
+}
+
+/**
+ * Return a random celebration message.
+ *
+ * - Each category rotates independently.
+ * - Every message is used before the pool resets.
+ * - Avoids immediate repeats when starting a new cycle.
+ * - History persists across page refreshes.
+ * - Returns only the message, never an action prefix.
+ */
+export function celebrationMessage(category = "General"): string {
+  const group = Object.prototype.hasOwnProperty.call(
+    celebrationLines,
+    category
+  )
+    ? category
+    : "General";
+
+  const pool = celebrationLines[group];
+
+  if (!pool?.length) return "certified W";
+
+  const history = readHistory();
+  const recent = history[group] ?? [];
+
+  const unused = pool.filter(line => !recent.includes(line));
+
+  // Reset the category once all messages have been played.
+  // Keep the last message excluded to prevent back-to-back repeats.
+  const previous = recent.at(-1);
+
+  const choices = unused.length
+    ? unused
+    : pool.filter(line => line !== previous);
+
+  const available = choices.length ? choices : pool;
+
+  const chosen = available[
+    Math.floor(Math.random() * available.length)
+  ];
+
+  // Begin a new cycle after exhausting the old one.
+  const next = unused.length
+    ? [...recent, chosen]
+    : [chosen];
+
+  history[group] = next.slice(-HISTORY_LIMIT);
+
+  try {
+    localStorage.setItem(RECENT_KEY, JSON.stringify(history));
+  } catch {
+    // Celebrations still work without persistent storage.
+  }
+
   return chosen;
 }

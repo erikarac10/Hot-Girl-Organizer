@@ -1,41 +1,28 @@
-/* ========================================
-   CALENDAR — SELF-ADJUSTING CONTENTS
-   Card width/height are controlled in index.css.
-   Styles below adapt to the available card size.
-======================================== */
-
-/* Calendar card: a fixed-size container with a flexible dates area. */
+/* Calendar dimensions are controlled by the dashboard in index.css. */
 .calendar {
-  container-name: hgo-calendar;
-  container-type: size;
-
+  container: hgo-calendar / size;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
   gap: 8px;
-
   min-width: 0;
   min-height: 0;
-  box-sizing: border-box;
   padding: 16px;
-
-  background: #fff;
   border: 1px solid #f0e9e9;
   border-radius: 18px;
+  background: #fff;
   box-shadow: 0 8px 32px rgba(79, 54, 69, 0.03);
 }
 
-/* ========================================
-   HEADER & MONTH NAVIGATION
-======================================== */
-
+/* Header and month controls */
 .calendar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   min-width: 0;
-  padding: 0;
 }
+
+.calendar-heading { min-width: 0; }
 
 .calendar-eyebrow {
   margin: 0 0 4px;
@@ -56,46 +43,45 @@
 
 .calendar-navigation {
   display: flex;
-  align-items: center;
   flex-shrink: 0;
-  gap: 4px;
+  align-items: center;
+  gap: 6px;
 }
 
 .calendar-navigation button {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border: 0;
-  border-radius: 8px;
-  background: #fff;
-  color: #a87d90;
+  border: 1px solid #efdce6;
+  border-radius: 10px;
+  background: #fff5f9;
+  color: #b7829f;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .calendar-navigation button:hover {
-  background: #f9ebef;
+  background: #f8e5ef;
+  border-color: #e5c5d6;
 }
 
-.calendar-navigation .calendar-today-button {
-  width: auto;
-  padding: 0 8px;
-  font-size: 10px;
-  font-weight: 800;
+.calendar-navigation button:focus-visible,
+.calendar-day:focus-visible {
+  outline: 2px solid #c88cac;
+  outline-offset: 2px;
 }
 
-/* ========================================
-   WEEKDAYS & DATE GRID
-======================================== */
-
-.calendar-weekdays {
+/* Seven-column weekday and date grids */
+.calendar-weekdays,
+.calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 4px;
   min-width: 0;
-  margin: 0;
-  text-align: center;
 }
+
+.calendar-weekdays { text-align: center; }
 
 .calendar-weekdays span {
   color: #baa6b3;
@@ -104,50 +90,60 @@
   letter-spacing: 0.6px;
 }
 
-/* The rows automatically divide up whatever height is left in the card. */
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-auto-rows: minmax(0, 1fr);
-  gap: 4px;
-  min-width: 0;
   min-height: 0;
 }
 
 .calendar-day {
   position: relative;
+  isolation: isolate;
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 2px;
-
   min-width: 0;
   min-height: 0;
   overflow: hidden;
   padding: 4px;
-
-  background: #fffbfb;
   border: 1px solid #f8f0f1;
   border-radius: 8px;
+  background: #fffbfb;
   color: #8c7385;
   text-align: left;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.calendar-day:hover {
-  background: #fff1f5;
-}
-
-.calendar-day.outside {
-  opacity: 0.38;
-}
+.calendar-day:hover { background: #fff1f5; }
+.calendar-day.outside { opacity: 0.38; }
 
 .calendar-day.selected {
-  background: #f8e4ed;
   border-color: #e7b4c7;
+  background: #f8e4ed;
+}
+
+/* Mood colors come from the shared palette in index.css. */
+.calendar-day.has-mood.selected {
+  border: 2px solid var(--mood-dark, #e7b4c7);
+}
+
+.calendar-mood-fill {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 0;
+  width: 100%;
+  background: linear-gradient(
+    to top,
+    var(--mood-dark, #c5daee),
+    var(--mood-light, #eff6ff)
+  );
+  opacity: 0.8;
+  pointer-events: none;
+  transition: height 0.2s ease;
 }
 
 .calendar-day-number {
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -163,210 +159,34 @@
   color: #fff;
 }
 
-.calendar-moments {
-  max-width: 100%;
-  overflow: hidden;
-  padding: 2px 4px;
-  border-radius: 5px;
-  background: #f9e2ea;
-  color: #a56585;
-  font-size: 8px;
-  font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.calendar-day.selected .calendar-moments {
-  background: #fff7f9;
-}
-
-/* ========================================
-   LEGEND
-======================================== */
-
-.calendar-legend {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  padding: 0;
-  color: #a994a2;
-  font-size: 9px;
-}
-
-.calendar-legend span {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.calendar-legend i {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #e6adc2;
-}
-
-/* ========================================
-   RESPONSIVE TO THE CALENDAR CARD ITSELF
-   (not the browser window)
-======================================== */
-
-/* Narrow calendar: compact buttons and smaller dates. */
+/* Adapt to the calendar card itself, not merely the browser width. */
 @container hgo-calendar (max-width: 440px) {
   .calendar-header h2 { font-size: 19px; }
-  .calendar-navigation button { width: 25px; height: 25px; }
-  .calendar-navigation .calendar-today-button { width: auto; padding: 0 6px; }
   .calendar-day { padding: 3px; }
   .calendar-day-number { min-width: 17px; height: 17px; font-size: 10px; }
-  .calendar-moments { font-size: 7px; }
 }
 
-/* Very narrow calendar: reduce clutter. */
 @container hgo-calendar (max-width: 335px) {
-  .calendar-header { flex-wrap: wrap; }
   .calendar-header h2 { font-size: 18px; }
+  .calendar-eyebrow { font-size: 8px; letter-spacing: 0.6px; }
   .calendar-weekdays span { font-size: 8px; letter-spacing: 0; }
-  .calendar-day { align-items: center; padding: 2px; }
-  .calendar-navigation { gap: 2px; }
+  .calendar-day { justify-content: center; padding: 2px; }
+  .calendar-navigation { gap: 3px; }
+  .calendar-navigation button { width: 30px; height: 30px; }
 }
 
-/* Short calendar: use a tiny activity dot to preserve date readability. */
 @container hgo-calendar (max-height: 375px) {
   .calendar-header h2 { font-size: 19px; }
   .calendar-eyebrow { margin-bottom: 2px; font-size: 8px; }
-  .calendar-moments {
-    width: 6px;
-    height: 6px;
-    flex-shrink: 0;
-    padding: 0;
-    border-radius: 50%;
-    background: #e9abc3;
-    font-size: 0;
-    overflow: hidden;
-  }
-  .calendar-day { gap: 1px; }
-  .calendar-legend { font-size: 8px; }
 }
 
-/* Extremely short calendars: prioritize the date grid. */
 @container hgo-calendar (max-height: 290px) {
   .calendar-eyebrow { display: none; }
-  .calendar-legend { display: none; }
   .calendar-day-number { min-width: 16px; height: 16px; font-size: 10px; }
 }
 
-/* ========================================
-   CALENDAR — MOOD + ENERGY VISUALIZATION
-======================================== */
-
-.calendar-day.mood-none {
-  --mood-fill: linear-gradient(
-    to top,
-    #8BB8F0,
-    #C5A3F5
-  );
-  --mood-accent: #8BB8F0;
+@media (prefers-reduced-motion: reduce) {
+  .calendar-day,
+  .calendar-mood-fill,
+  .calendar-navigation button { transition: none; }
 }
-
-
-/* ========================================
-   BATTERY FILL INSIDE CALENDAR DAYS
-======================================== */
-
-.calendar-day {
-  position: relative;
-  isolation: isolate;
-}
-
-/* Fill rises from bottom to top */
-
-/* ========================================
-   CALENDAR — MOOD + BATTERY FILL
-======================================== */
-
-.calendar-mood-fill {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  width: 100%;
-
-  background: linear-gradient(
-    to top,
-    var(--mood-dark, #c5daee),
-    var(--mood-light, #EFF6FF)
-  );
-
-  opacity: 0.8;
-  pointer-events: none;
-  z-index: 0;
-
-  transition: height 0.2s ease;
-}
-
-.calendar-day {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.calendar-day-number {
-  position: relative;
-  z-index: 1;
-}
-
-.calendar-day.has-mood.selected {
-  border: 2px solid var(--mood-dark);
-}
-
-/* Mood recorded without battery level */
-
-.calendar-mood-marker {
-  position: absolute;
-
-  bottom: 4px;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  width: 7px;
-  height: 7px;
-
-  border-radius: 50%;
-  background: var(--mood-dark, #8BB8F0);
-
-  pointer-events: none;
-}
-
-/* Keep dates and activity counts visible */
-
-.calendar-day-number,
-.calendar-moments {
-  position: relative;
-  z-index: 1;
-}
-
-/* Make current date stand out */
-
-.calendar-day.current .calendar-day-number {
-  background: #b97596;
-  color: white;
-}
-
-/* Mood legend */
-
-.calendar-legend .calendar-legend-mood {
-  background: linear-gradient(
-    135deg,
-    #F4C77D,
-    #EFA0C3,
-    #8BBCE8,
-    #9D83D8,
-    #8ECBB2
-  );
-}
-

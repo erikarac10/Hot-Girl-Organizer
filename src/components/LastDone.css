@@ -1,32 +1,20 @@
-/* Main card */
-
+/* Last Done — compact, scrollable dashboard card */
 .last-done {
   container-type: inline-size;
-
   display: flex;
   flex-direction: column;
-
-  margin-top: 22px;
-  padding: 22px 23px 23px;
-
   min-width: 0;
   min-height: 0;
-
-  background: white;
+  padding: 22px 23px 23px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #fff;
   border: 1px solid #f0e9e9;
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(79, 54, 69, 0.027);
-
-  box-sizing: border-box;
-
-  overflow-x: hidden;
-  overflow-y: auto;
-
   scrollbar-width: thin;
   scrollbar-color: #efdbe5 transparent;
 }
-
-/* Heading */
 
 .last-done-heading {
   display: flex;
@@ -34,40 +22,42 @@
   gap: 12px;
 }
 
+.last-done-heading > div:last-child { min-width: 0; }
+
 .last-done-icon {
   display: grid;
   place-items: center;
+  flex: 0 0 40px;
   width: 40px;
   height: 40px;
-  flex: 0 0 40px;
   border-radius: 12px;
   background: #f7e5ed;
   color: #b87396;
 }
 
 .last-done-eyebrow {
+  margin: 0 0 7px;
+  color: #c59bac;
   font-size: 8px;
   font-weight: 800;
   letter-spacing: 1.7px;
-  color: #c59bac;
-  margin: 0 0 7px;
 }
 
 .last-done-heading h2 {
-  font-family: "Fraunces", serif;
-  font-size: 19px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  color: #63485d;
   margin: 0;
+  color: #63485d;
+  font: 600 19px/1.2 "Fraunces", serif;
+  letter-spacing: -0.5px;
+  overflow-wrap: anywhere;
 }
 
-/* Search field */
-
+/* Search */
 .last-done-search {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   gap: 8px;
+  min-width: 0;
   margin-top: 17px;
   padding: 0 11px;
   background: #fcf8f8;
@@ -76,63 +66,71 @@
   color: #c3a9b6;
 }
 
-.last-done-search:focus-within {
-  border-color: #e1b0c1;
-}
+.last-done-search:focus-within { border-color: #e1b0c1; }
 
 .last-done-search input {
   width: 100%;
   min-width: 0;
-  height: 39px;
-  border: none;
+  height: 40px;
+  padding: 0;
+  border: 0;
   background: transparent;
   outline: none;
   color: #6c5765;
-  font-size: 11px;
+  font: inherit;
+  font-size: 12px;
 }
 
-.last-done-search input::placeholder {
-  color: #bbaab4;
-}
+.last-done-search input::placeholder { color: #bbaab4; }
+.last-done-search input::-webkit-search-cancel-button { cursor: pointer; }
 
-/* Search results */
+/* Search matches */
+.last-done-results { padding-top: 10px; }
 
-.last-done-results {
-  padding-top: 10px;
+.last-done-result,
+.last-done-history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #f3e9ea;
+  cursor: pointer;
 }
 
 .last-done-result {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
+  min-height: 40px;
   padding: 8px 0;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #f8f0f0;
   color: #7c6678;
-  font-size: 10px;
-  text-align: left;
+  font-size: 11px;
 }
 
-.last-done-result:hover {
-  color: #ad5778;
+.last-done-result:hover,
+.last-done-result[aria-expanded="true"] { color: #ad5778; }
+
+.last-done-result span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .last-done-result strong {
-  white-space: nowrap;
+  flex-shrink: 0;
   color: #b56f8d;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .last-done-no-results {
+  margin: 8px 0;
   color: #aa95a1;
   font-size: 11px;
   line-height: 1.6;
 }
 
-/* Expandable history */
-
+/* Selected activity history */
 .last-done-history {
   margin-top: 15px;
   padding: 12px;
@@ -149,26 +147,14 @@
 }
 
 .last-done-history-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
   padding: 10px 0;
-  border: none;
-  border-bottom: 1px solid #f3e9ea;
-  background: transparent;
   color: #ad8298;
-  text-align: left;
 }
 
-.last-done-history-row:last-child {
-  border-bottom: none;
-}
-
-.last-done-history-row:hover {
-  color: #965877;
-}
+.last-done-history-row:last-child { border-bottom: 0; }
+.last-done-history-row:hover { color: #965877; }
+.last-done-history-row > div { min-width: 0; }
+.last-done-history-row svg { flex-shrink: 0; }
 
 .last-done-history-row strong {
   display: block;
@@ -187,130 +173,36 @@
   font-size: 11px;
   line-height: 1.5;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Adapt to the card width, not the device width. */
+@container (max-width: 400px) {
+  .last-done-heading { gap: 9px; }
+  .last-done-heading h2 { font-size: 17px; }
+  .last-done-icon { flex-basis: 34px; width: 34px; height: 34px; }
+  .last-done-eyebrow { letter-spacing: 1px; }
+  .last-done-search input { height: 38px; }
+  .last-done-history { padding: 10px; }
+}
+
+@container (max-width: 300px) {
+  .last-done { padding: 16px 12px; }
+  .last-done-heading h2 { font-size: 15px; }
+  .last-done-icon { flex-basis: 28px; width: 28px; height: 28px; }
+  .last-done-eyebrow { font-size: 7px; letter-spacing: 0.5px; }
+  .last-done-search { gap: 5px; padding: 0 8px; }
+  .last-done-result { flex-wrap: wrap; gap: 3px; }
+  .last-done-result strong { font-size: 10px; }
+  .last-done-history-row { padding: 8px 0; }
 }
 
 @media (max-width: 600px) {
-  .last-done {
-    padding: 19px 17px;
-  }
-}
-/* ========================================
-   LAST DONE — RESPONSIVE CONTENT
-======================================== */
-
-/* Prevent heading from overflowing */
-
-.last-done-heading > div:last-child {
-  min-width: 0;
+  .last-done { padding: 19px 17px; }
+  .last-done-result,
+  .last-done-history-row { min-height: 44px; }
 }
 
-.last-done-heading h2 {
-  overflow-wrap: anywhere;
-}
-
-.last-done-search {
-  flex-shrink: 0;
-  min-width: 0;
-}
-
-.last-done-result span {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.last-done-history-row > div {
-  min-width: 0;
-}
-
-/* ========================================
-   MEDIUM CARD
-======================================== */
-
-@container (max-width: 400px) {
-
-  .last-done-heading {
-    gap: 9px;
-  }
-
-  .last-done-heading h2 {
-    font-size: 17px;
-  }
-
-  .last-done-icon {
-    width: 34px;
-    height: 34px;
-    flex-basis: 34px;
-  }
-
-  .last-done-eyebrow {
-    font-size: 8px;
-    letter-spacing: 1px;
-  }
-
-  .last-done-search input {
-    height: 35px;
-    font-size: 10px;
-  }
-
-  .last-done-result {
-    font-size: 10px;
-    gap: 6px;
-  }
-
-  .last-done-history {
-    padding: 10px;
-  }
-}
-
-/* ========================================
-   SMALL CARD
-======================================== */
-
-@container (max-width: 300px) {
-
-  .last-done-heading h2 {
-    font-size: 15px;
-  }
-
-  .last-done-icon {
-    width: 28px;
-    height: 28px;
-    flex-basis: 28px;
-  }
-
-  .last-done-eyebrow {
-    font-size: 7px;
-    letter-spacing: 0.5px;
-  }
-
-  .last-done-search {
-    padding: 0 8px;
-    gap: 5px;
-  }
-
-  .last-done-search input {
-    height: 32px;
-    font-size: 10px;
-  }
-
-  .last-done-result {
-    flex-wrap: wrap;
-    gap: 3px;
-  }
-
-  .last-done-result strong {
-    font-size: 9px;
-  }
-
-  .last-done-history-row {
-    padding: 7px 0;
-  }
-
-  .last-done-history-row strong {
-    font-size: 10px;
-  }
-
-  .last-done-history-row p {
-    font-size: 10px;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .last-done * { scroll-behavior: auto; }
 }

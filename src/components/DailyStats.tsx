@@ -1,15 +1,5 @@
-import { useEffect, useState } from "react";
-import {
-  Heart,
-  Clock3,
-  PawPrint,
-  Sparkles,
-  House,
-  Star,
-  CheckCheck,
-  Smile
-} from "lucide-react";
-
+import { useEffect, useMemo, useState } from "react";
+import { Clock3, Heart, House, PawPrint, Sparkles, Star } from "lucide-react";
 import "./DailyStats.css";
 
 type Moment = {
@@ -26,224 +16,121 @@ type Activity = {
   category: string;
 };
 
-type Reminder = {
-  done: boolean;
-  completedOn?: string;
-};
+type History = { moments: Moment[]; activities: Activity[] };
+type DailyStatsProps = { selectedDate: Date };
 
-type MoodEntry = {
-  mood?: string;
-  energy?: string;
-  note?: string;
-};
+const STORAGE = {
+  moments: "hot-girl-moments",
+  activities: "hot-girl-activities"
+} as const;
 
-type MoodHistory = Record<string, MoodEntry>;
+const isObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
 
-function loadMoods(): MoodHistory {
-  try {
-    return JSON.parse(
-      localStorage.getItem("hot-girl-moodboard") || "{}"
-    );
-  } catch {
-    return {};
-  }
+function isMoment(value: unknown): value is Moment {
+  return isObject(value) && typeof value.date === "string" && typeof value.text === "string";
 }
 
-type DailyStatsProps = {
-  selectedDate: Date;
-};
-
-function dateKey(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
+function isActivity(value: unknown): value is Activity {
+  return isObject(value) && typeof value.id === "string" &&
+    typeof value.name === "string" && typeof value.category === "string";
 }
 
-function loadSaved<T>(key: string): T[] {
+function readArray<T>(key: string, isValid: (item: unknown) => item is T): T[] {
   try {
-    return JSON.parse(localStorage.getItem(key) || "[]");
+    const value: unknown = JSON.parse(localStorage.getItem(key) ?? "[]");
+    return Array.isArray(value) ? value.filter(isValid) : [];
   } catch {
     return [];
   }
 }
 
+function readHistory(): History {
+  return {
+    moments: readArray(STORAGE.moments, isMoment),
+    activities: readArray(STORAGE.activities, isActivity)
+  };
+}
+
+function dateKey(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function formatMinutes(minutes: number): string {
+  const total = Math.round(minutes);
+  if (total < 60) return `${total} min`;
+
+  const hours = Math.floor(total / 60);
+  const remainder = total % 60;
+  return remainder ? `${hours}h ${remainder}m` : `${hours}h`;
+}
+
 function DailyStats({ selectedDate }: DailyStatsProps) {
-  const [moments, setMoments] = useState<Moment[]>(
-    () => loadSaved("hot-girl-moments")
-  );
+  const [history, setHistory] = useState<History>(readHistory);
 
-  const [activities, setActivities] = useState<Activity[]>(
-    () => loadSaved("hot-girl-activities")
-  );
+  useEffect(() => {
+    const refresh = () => setHistory(readHistory());
+    window.addEventListener("hgo-history-updated", refresh);
+    window.addEventListener("storage", refresh);
 
-  const [reminders, setReminders] = useState<Reminder[]>(
-    () => loadSaved("hot-girl-reminders")
-  );
-
-  const [moods, setMoods] = useState<MoodHistory>(loadMoods);
-
-    // Refresh whenever a moment, reminder, or mood changes
-        useEffect(() => {
-        function refresh() {
-            setMoments(loadSaved("hot-girl-moments"));
-            setActivities(loadSaved("hot-girl-activities"));
-            setReminders(loadSaved("hot-girl-reminders"));
-            setMoods(loadMoods());
-        }
-
-        window.addEventListener("hgo-history-updated", refresh);
-        window.addEventListener("hgo-reminders-updated", refresh);
-        window.addEventListener("hgo-mood-updated", refresh);
-        window.addEventListener("storage", refresh);
-
-        return () => {
-            window.removeEventListener("hgo-history-updated", refresh);
-            window.removeEventListener("hgo-reminders-updated", refresh);
-            window.removeEventListener("hgo-mood-updated", refresh);
-            window.removeEventListener("storage", refresh);
-        };
-    }, []);
+    return () => {
+      window.removeEventListener("hgo-history-updated", refresh);
+      window.removeEventListener("storage", refresh);
+    };
+  }, []);
 
   const selectedKey = dateKey(selectedDate);
-  const dayMood = moods[selectedKey];
 
-    const moodLabel = dayMood?.mood
-    ? dayMood.mood.charAt(0).toUpperCase() + dayMood.mood.slice(1)
-    : "—";
+  const counts = useMemo(() => {
+    const byId = new Map(history.activities.map(activity => [activity.id, activity.category]));
+    const byName = new Map(history.activities.map(activity => [activity.name.toLowerCase(), activity.category]));
 
-    const energyLabel = dayMood?.energy
-    ? `${dayMood.energy.charAt(0).toUpperCase()}${dayMood.energy.slice(1)} energy`
-    : "No energy recorded";
+    const result = { moments: 0, minutes: 0, avery: 0, care: 0, home: 0, fun: 0 };
 
-  // Everything logged on the selected date
-  const dayMoments = moments.filter(
-    moment => moment.date === selectedKey
-  );
+    for (const moment of history.moments) {
+      if (moment.date !== selectedKey) continue;
+      result.moments += 1;
 
-  // Find the category of a logged activity
-  function getCategory(moment: Moment) {
-    if (moment.category) return moment.category;
+      const category = moment.category ||
+        (moment.activityId ? byId.get(moment.activityId) : undefined) ||
+        byName.get(moment.text.toLowerCase()) || "Other";
 
-    const activity = activities.find(
-      item =>
-        item.id === moment.activityId ||
-        item.name.toLowerCase() === moment.text.toLowerCase()
-    );
+      switch (category) {
+        case "Avery": result.avery += 1; break;
+        case "Self-care": result.care += 1; break;
+        case "Home": result.home += 1; break;
+        case "Fun": result.fun += 1; break;
+      }
 
-    return activity?.category ?? "Other";
-  }
+      if (category === "Movement" || (category === "Avery" && /walk/i.test(moment.text))) {
+        const minutes = moment.minutes;
+        if (typeof minutes === "number" && Number.isFinite(minutes) && minutes > 0) {
+          result.minutes += minutes;
+        }
+      }
+    }
 
-  // Count moments belonging to a category
-  function countCategory(category: string) {
-    return dayMoments.filter(
-      moment => getCategory(moment) === category
-    ).length;
-  }
-
-  // Only count time spent physically active
-  const activeMinutes = dayMoments.reduce((total, moment) => {
-    const category = getCategory(moment);
-
-    const isActive =
-      category === "Movement" ||
-      (
-        category === "Avery" &&
-        moment.text.toLowerCase().includes("walk")
-      );
-
-    return isActive
-      ? total + (Number(moment.minutes) || 0)
-      : total;
-  }, 0);
-
-  function formatTime(minutes: number) {
-    if (minutes < 60) return `${minutes} min`;
-
-    const hours = Math.floor(minutes / 60);
-    const remaining = minutes % 60;
-
-    return remaining
-      ? `${hours}h ${remaining}m`
-      : `${hours}h`;
-  }
-
-  // Only count completed to-do reminders, not daily rituals
-  const completedTodos = reminders.filter(
-    reminder =>
-      reminder.done &&
-      reminder.completedOn === selectedKey
-  ).length;
+    return result;
+  }, [history, selectedKey]);
 
   const stats = [
-    {
-      title: "LITTLE MOMENTS",
-      value: dayMoments.length,
-      subtitle: "Things you logged",
-      icon: <Heart size={20} />,
-      color: "rose"
-    },
-    {
-      title: "TIME WELL SPENT",
-      value: formatTime(activeMinutes),
-      subtitle: "Time spent moving",
-      icon: <Clock3 size={20} />,
-      color: "peach"
-    },
-    {
-      title: "AVERY LOVE",
-      value: countCategory("Avery"),
-      subtitle: "Little moments with Avery",
-      icon: <PawPrint size={20} />,
-      color: "mint"
-    },
-    {
-      title: "HOT GIRL MAINTENANCE",
-      value: countCategory("Self-care"),
-      subtitle: "Ways you cared for yourself",
-      icon: <Sparkles size={20} />,
-      color: "blue"
-    },
-    {
-      title: "DOMESTIC GODDESS",
-      value: countCategory("Home"),
-      subtitle: "Home-care moments",
-      icon: <House size={20} />,
-      color: "lavender"
-    },
-    {
-      title: "MAIN CHARACTER MOMENTS",
-      value: countCategory("Fun"),
-      subtitle: "Fun things you did",
-      icon: <Star size={20} />,
-      color: "pink"
-    }
-  ];
+    { label: "Tings Logged Today", value: counts.moments, icon: Heart, color: "rose" },
+    { label: "Time Spent in Motion", value: formatMinutes(counts.minutes), icon: Clock3, color: "peach" },
+    { label: "Bestie Moments with Avery", value: counts.avery, icon: PawPrint, color: "mint" },
+    { label: "Baddie Maintenance Buffs", value: counts.care, icon: Sparkles, color: "blue" },
+    { label: "Domestic Queen Duties", value: counts.home, icon: House, color: "lavender" },
+    { label: "Silly Stacks", value: counts.fun, icon: Star, color: "pink" },
+  ] as const;
 
   return (
-    <section className="daily-stats">
-
-      {/* Daily statistics */}
-      {stats.map(stat => (
-        <div
-          className={`stat-card ${stat.color}`}
-          key={stat.subtitle}
-        >
-          <div className="stat-icon">
-            {stat.icon}
-          </div>
-
-          <strong className="stat-number">
-            {stat.value}
-          </strong>
-
-          <p className="stat-subtitle">
-            {stat.subtitle}
-          </p>
+    <section className="daily-stats" aria-label="Daily statistics">
+      {stats.map(({ label, value, icon: Icon, color }) => (
+        <div className={`stat-card ${color}`} key={label}>
+          <span className="stat-icon" aria-hidden="true"><Icon size={18} /></span>
+          <strong className="stat-number">{value}</strong>
+          <span className="stat-subtitle">{label}</span>
         </div>
       ))}
-
     </section>
   );
 }

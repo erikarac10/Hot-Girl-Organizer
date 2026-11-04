@@ -1,214 +1,146 @@
-/* ========================================
-   VIBE CHECK — SIDEBAR DESIGN
-======================================== */
-
+/* Vibe Check: dimensions and responsive placement are controlled by index.css. */
 .moodboard {
-  container-type: inline-size;
-
+  container: moodboard / inline-size;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 38px;
-  grid-template-rows: auto auto;
-  column-gap: 10px;
-  row-gap: 12px;
-
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) 130px;
+  gap: 12px;
   width: 100%;
   min-width: 0;
-  padding: 12px 10px;
-
-  background: #fffafd;
-  border: 1px solid #f1e5eb;
-  border-radius: 14px;
-
+  min-height: 0;
+  margin: 0;
+  padding: 14px 12px;
+  background: #fff;
+  border: 1px solid #f0e3ea;
+  border-radius: 18px;
   box-sizing: border-box;
 }
 
-
-/* ========================================
-   HEADER
-======================================== */
-
+/* Heading */
 .moodboard-header {
   grid-column: 1 / -1;
-
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f3e7ed;
 }
 
 .moodboard-header h2 {
   margin: 0;
-
-  font-family: "Fraunces", serif;
-  font-size: 17px;
-  font-weight: 600;
-
   color: #73506a;
+  font: 600 19px/1.2 "Fraunces", serif;
+  letter-spacing: -0.4px;
 }
 
-.moodboard-header h2 span {
-  color: #cc91b0;
-}
+.moodboard-header h2 span { color: #cc91b0; }
 
 .moodboard-description {
-  margin: 3px 0 0;
-
-  font-size: 10px;
+  margin: 4px 0 0;
   color: #b49aaa;
+  font-size: 10px;
 }
 
 .moodboard-icon {
   display: grid;
   place-items: center;
-
-  width: 27px;
-  height: 27px;
   flex-shrink: 0;
-
-  border-radius: 9px;
-  background: #f9eaf2;
+  width: 32px;
+  height: 32px;
   color: #bd83a2;
+  background: linear-gradient(145deg, #fff0f6, #f8e2ed);
+  border: 1px solid #f0dce6;
+  border-radius: 12px;
 }
 
-
-/* ========================================
-   MOOD LIST — VERTICAL
-======================================== */
-
+/* Mood choices inherit their palette variables from index.css. */
 .moodboard-moods {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-
-  width: 100%;
+  gap: 8px;
   min-width: 0;
+  min-height: 0;
 }
-
-
-/* ========================================
-   INDIVIDUAL MOOD
-======================================== */
 
 .moodboard-mood {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-
-  gap: 7px;
-
+  gap: 8px;
+  flex: 1 1 0;
   width: 100%;
   min-width: 0;
-  min-height: 30px;
-
-  padding: 5px 7px;
-
-  border: 1px solid transparent;
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
+  min-height: 34px;
+  padding: 7px;
+  text-align: left;
+  color: #8f7284;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--mood-light, #fff0f6) 80%, white),
+    color-mix(in srgb, var(--mood-light, #fff0f6) 35%, white)
+  );
+  border: 1px solid color-mix(in srgb, var(--mood-dark, #eacfdb) 25%, white);
+  border-radius: 12px;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.8);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .moodboard-mood:hover {
-  transform: translateX(2px);
-  border-color: #e4c4d4;
+  transform: translateY(-2px);
+  border-color: var(--mood-dark, #eacfdb);
+  box-shadow: 0 5px 12px rgba(110, 75, 95, 0.09);
 }
 
 .moodboard-mood.selected {
-  border-color: #bb7b9e;
-  box-shadow: inset 0 0 0 1px #bb7b9e;
+  border-color: var(--mood-dark, #eacfdb);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--mood-light, #fff0f6) 70%, transparent),
+    0 5px 14px rgba(110, 75, 95, 0.08);
 }
-
-
-/* ========================================
-   MOOD SYMBOLS
-======================================== */
 
 .moodboard-mood-symbol {
   display: grid;
   place-items: center;
-
-  width: 18px;
   flex-shrink: 0;
-
-  font-family: "Segoe UI Symbol", serif;
-  font-size: 18px;
-  line-height: 1;
+  width: 27px;
+  height: 27px;
+  color: var(--mood-dark, #d8c7ef);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 9px;
+  font: 19px/1 "Segoe UI Symbol", sans-serif;
 }
 
 .moodboard-mood-label {
   min-width: 0;
-
-  font-size: 10px;
+  color: #8f7284;
+  font-size: 11px;
   font-weight: 700;
   line-height: 1.2;
-
-  text-align: left;
-  color: #8f7284;
-
   overflow-wrap: anywhere;
 }
 
-/* ========================================
-   PASTEL MOOD COLOURS
-   Colours controlled in index.css
-======================================== */
-
-.moodboard-mood {
-  background: color-mix(
-    in srgb,
-    var(--mood-light) 35%,
-    white
-  );
-}
-
-.moodboard-mood-symbol {
-  color: var(--mood-dark);
-}
-
-.moodboard-mood.selected {
-  border-color: var(--mood-dark);
-  box-shadow: inset 0 0 0 1px var(--mood-dark);
-}
-
-
-/* ========================================
-   BATTERY — RIGHT SIDE
-======================================== */
-
+/* Sparkles sit behind the centered vertical battery. */
 .moodboard-battery-section {
+  position: relative;
+  grid-row: 3;
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: stretch;
-
   width: 100%;
   min-width: 0;
   min-height: 0;
-
-  padding: 0;
-  margin: 0;
-
-  border: none;
-}
-
-.moodboard-battery-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  isolation: isolate;
 }
 
 .moodboard-battery-area {
+  position: relative;
+  z-index: 2;
   display: flex;
-  justify-content: center;
   align-items: center;
-
+  justify-content: center;
   width: 100%;
-  height: 70%;
+  height: 100%;
   min-height: 0;
 }
 
@@ -216,125 +148,109 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  width: 100%;
+  width: 48px;
   height: 100%;
   min-height: 0;
 }
 
-/* ========================================
-   BATTERY TERMINAL
-======================================== */
-
 .battery-terminal {
+  flex-shrink: 0;
   width: 18px;
   height: 6px;
-
-  flex-shrink: 0;
-
-  background: #a5a6d8;
+  background: var(--mood-dark, var(--default-mood-dark, #d8c7ef));
   border-radius: 4px 4px 0 0;
 }
 
-
-/* ========================================
-   VERTICAL BATTERY BODY
-======================================== */
-
 .battery-body {
   position: relative;
-
-  width: 32px;
-  height: 100%;
+  flex: 1 1 auto;
+  width: 42px;
   min-height: 0;
-  flex: 1;
-
   overflow: hidden;
-
-  border: 2px solid #a5a6d8;
+  background: #fff;
+  border: 2px solid var(--mood-dark, var(--default-mood-dark, #d8c7ef));
   border-radius: 9px;
-
-  background: #f0effb;
-
+  box-shadow: inset 0 2px 5px rgba(80, 60, 80, 0.08), 0 3px 10px rgba(110, 75, 95, 0.08);
   cursor: ns-resize;
   touch-action: none;
-
   user-select: none;
   -webkit-user-select: none;
+  transition: border-color 0.25s ease;
 }
 
-.battery-body:hover {
-  border-color: #9293cb;
-}
+.battery-body[aria-disabled="true"] { cursor: not-allowed; }
 
 .battery-body:focus-visible {
   outline: 3px solid #dcd4fa;
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
-
-/* ========================================
-   RESPONSIVE — NARROW COMPONENT
-======================================== */
-
-@container (max-width: 185px) {
-
-  .moodboard-mood {
-    padding: 4px 5px;
-    gap: 5px;
-  }
-
-  .moodboard-mood-symbol {
-    font-size: 16px;
-    width: 16px;
-  }
-
-  .moodboard-mood-label {
-    font-size: 9px;
-  }
-
-  .battery-body {
-    width: 27px;
-  }
-}
-
-
-/* ========================================
-   RESPONSIVE — VERY NARROW COMPONENT
-======================================== */
-
-@container (max-width: 140px) {
-
-  .moodboard-icon {
-    display: none;
-  }
-
-  .moodboard-mood-label {
-    font-size: 8px;
-  }
-}
-
-/* ========================================
-   BATTERY COLOUR — RESPONDS TO MOOD
-======================================== */
 
 .battery-fill {
-  position: absolute !important;
-
-  top: auto !important;
-  bottom: 0 !important;
-  left: 0;
-  right: 0;
-
+  position: absolute;
+  inset: auto 0 0;
   width: 100%;
-
-  background: linear-gradient(
-    to top,
-    var(--mood-dark),
-    var(--mood-light)
+  background: linear-gradient(to top,
+    var(--mood-dark, var(--default-mood-dark, #d8c7ef)),
+    var(--mood-light, var(--default-mood-light, #f0e6ff))
   );
-
-  transform: none !important;
   border-radius: 5px 5px 0 0;
+  box-shadow: 0 0 0 1px color-mix(in srgb,
+    var(--mood-dark, var(--default-mood-dark, #d8c7ef)) 40%, transparent);
+  pointer-events: none;
+  transition: height 0.18s ease;
+}
+
+.battery-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.3), transparent 65%);
+}
+
+.battery-sparkles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
   pointer-events: none;
 }
 
+.battery-sparkle {
+  position: absolute;
+  display: block;
+  color: var(--mood-dark, var(--default-mood-dark, #d8c7ef));
+  font: 18px/1 "Segoe UI Symbol", sans-serif;
+  filter: drop-shadow(0 0 4px var(--mood-light, var(--default-mood-light, #f0e6ff)));
+  animation: battery-fairy-float 3s ease-in-out infinite;
+  transition: opacity 0.6s ease;
+}
+
+.battery-sparkle:nth-child(1) { left: 15%; top: 17%; font-size: 19px; animation-delay: -0.5s; }
+.battery-sparkle:nth-child(2) { right: 17%; top: 73%; font-size: 22px; animation-delay: -1.5s; }
+.battery-sparkle:nth-child(3) { right: 12%; top: 35%; font-size: 15px; animation-delay: -2.2s; }
+.battery-sparkle:nth-child(4) { left: 27%; top: 62%; font-size: 26px; animation-delay: -0.9s; }
+.battery-sparkle:nth-child(5) { left: 11%; top: 85%; font-size: 17px; animation-delay: -1.8s; }
+.battery-sparkle:nth-child(6) { right: 25%; top: 12%; font-size: 20px; animation-delay: -2.7s; }
+.battery-sparkle:nth-child(7) { right: 31%; top: 57%; font-size: 27px; animation-delay: -1.1s; }
+
+@keyframes battery-fairy-float {
+  0%, 100% { transform: translateY(5px) rotate(-12deg) scale(0.85); }
+  50% { transform: translateY(-7px) rotate(12deg) scale(1.12); }
+}
+
+/* The responsive grid and battery placement are defined in index.css. */
+@container moodboard (max-width: 220px) {
+  .moodboard-mood { gap: 5px; padding: 5px; }
+  .moodboard-mood-symbol { width: 22px; height: 22px; font-size: 16px; }
+  .moodboard-mood-label { font-size: 10px; }
+}
+
+@media (max-width: 900px) {
+  .moodboard-mood { flex: none; }
+  .moodboard-battery-section { grid-row: 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .battery-sparkle { animation: none; transition: none; }
+  .battery-fill, .battery-body, .moodboard-mood { transition: none; }
+}

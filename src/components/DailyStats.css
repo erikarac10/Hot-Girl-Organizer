@@ -1,240 +1,90 @@
-/* ========================================
-   DAILY STATS — SIDEBAR LAYOUT
-======================================== */
-
-.daily-stats {
-  display: flex;
-  flex-direction: column;
-
-  width: 100%;
-  gap: 8px;
-}
-
-
-/* ========================================
-   SIDEBAR BRANDING
-======================================== */
-
-.sidebar-brand {
-  text-align: center;
-
-  padding: 20px 10px 22px;
-  margin-bottom: 12px;
-
-  border-bottom: 1px solid #f3dce8;
-}
-
-.brand-flower {
-  display: block;
-
-  font-size: 32px;
-  line-height: 1;
-
-  color: #e6a3c5;
-}
-
-.sidebar-brand h1 {
-  margin: 12px 0 8px;
-
-  font-family: "Fraunces", serif;
-  font-size: 23px;
-  font-weight: 700;
-  line-height: 1.2;
-
-  color: #735a76;
-}
-
-.sidebar-brand p {
-  margin: 0;
-
-  font-size: 11px;
-  line-height: 1.5;
-
-  color: #b59aaa;
-}
-
-.sidebar-date {
-  display: block;
-
-  margin-top: 16px;
-
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-
-  color: #a888a0;
-}
-
-
-/* ========================================
-   STAT CARDS — HORIZONTAL LAYOUT
-======================================== */
-
-.stat-card {
+/* DailyStats sits inside .hgo-stats-panel; index.css owns the panel/grid size. */
+#root .hgo-stats-panel .daily-stats {
   display: grid;
-
-  grid-template-columns: 32px minmax(0, 1fr) auto;
-  grid-template-areas: "icon label value";
-
-  align-items: center;
-  column-gap: 10px;
-
-  min-height: 48px;
-  padding: 8px 12px;
-
-  border: 1px solid rgba(180, 150, 170, 0.12);
-  border-radius: 12px;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #efdbe5 transparent;
 }
 
-.stat-card:hover {
-  transform: translateY(-2px);
+/* Compact two-row stat cards fit the narrow middle column on desktop and mobile. */
+#root .hgo-stats-panel .daily-stats .stat-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "icon value" "label label";
+  align-content: center;
+  align-items: center;
+  gap: 5px 8px;
+  min-width: 0;
+  min-height: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(180, 150, 170, 0.14);
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
+#root .hgo-stats-panel .daily-stats .stat-card:hover {
+  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(140, 100, 130, 0.08);
 }
 
-
-/* ========================================
-   STAT ICONS
-======================================== */
-
-.stat-icon {
+#root .hgo-stats-panel .daily-stats .stat-icon {
   grid-area: icon;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 32px;
-  height: 32px;
-
-  border-radius: 10px;
-
-  background: rgba(255, 255, 255, 0.65);
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.7);
   color: #a66e8a;
-
-  flex-shrink: 0;
 }
 
-.stat-icon svg {
-  width: 17px;
-  height: 17px;
-
-  stroke-width: 2;
-}
-
-
-/* ========================================
-   STAT DESCRIPTIONS
-======================================== */
-
-.stat-subtitle {
-  grid-area: label;
-
-  margin: 0;
-
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.35;
-
-  color: #8f7585;
-}
-
-
-/* ========================================
-   STAT VALUES
-======================================== */
-
-.stat-number {
+#root .hgo-stats-panel .daily-stats .stat-number {
   grid-area: value;
-
   margin: 0;
-
+  color: #63485d;
   font-family: "Fraunces", serif;
-  font-size: 20px;
+  font-size: clamp(17px, 1.7vw, 22px);
   font-weight: 600;
   line-height: 1.1;
-
-  color: #63485d;
-
   text-align: right;
   white-space: nowrap;
 }
 
-
-/* ========================================
-   PASTEL CARD COLOURS
-======================================== */
-
-.stat-card.pink {
-  background: #fcebf2;
+#root .hgo-stats-panel .daily-stats .stat-subtitle {
+  grid-area: label;
+  min-width: 0;
+  margin: 0;
+  color: #8f7585;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
-.stat-card.lavender {
-  background: #f1edfa;
-}
-
-.stat-card.peach {
-  background: #fff1e8;
-}
-
-.stat-card.rose {
-  background: #fff0f4;
-}
-
-.stat-card.blue {
-  background: #edf5fc;
-}
-
-.stat-card.yellow {
-  background: #fff7e8;
-}
-
-.stat-card.mint {
-  background: #eef8f2;
-}
-
-
-/* ========================================
-   RESPONSIVE — SMALL SCREENS
-======================================== */
+/* Explicit color classes take priority over index.css's old nth-child rainbow. */
+#root .hgo-stats-panel .daily-stats .stat-card.rose { background: #fff0f4; }
+#root .hgo-stats-panel .daily-stats .stat-card.peach { background: #fff1e8; }
+#root .hgo-stats-panel .daily-stats .stat-card.mint { background: #eef8f2; }
+#root .hgo-stats-panel .daily-stats .stat-card.blue { background: #edf5fc; }
+#root .hgo-stats-panel .daily-stats .stat-card.lavender { background: #f1edfa; }
+#root .hgo-stats-panel .daily-stats .stat-card.pink { background: #fcebf2; }
 
 @media (max-width: 450px) {
+  #root .hgo-stats-panel .daily-stats { gap: 7px; }
+  #root .hgo-stats-panel .daily-stats .stat-card { padding: 9px; }
+  #root .hgo-stats-panel .daily-stats .stat-icon { width: 26px; height: 26px; }
+  #root .hgo-stats-panel .daily-stats .stat-icon svg { width: 16px; height: 16px; }
+  #root .hgo-stats-panel .daily-stats .stat-subtitle { font-size: 9px; }
+}
 
-  .daily-stats {
-    gap: 6px;
-  }
-
-  .stat-card {
-    min-height: 44px;
-    padding: 7px 10px;
-
-    grid-template-columns: 28px minmax(0, 1fr) auto;
-    column-gap: 8px;
-  }
-
-  .stat-icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  .stat-icon svg {
-    width: 15px;
-    height: 15px;
-  }
-
-  .stat-subtitle {
-    font-size: 10px;
-  }
-
-  .stat-number {
-    font-size: 18px;
-  }
-
-  .sidebar-brand h1 {
-    font-size: 20px;
-  }
+@media (prefers-reduced-motion: reduce) {
+  #root .hgo-stats-panel .daily-stats .stat-card { transition: none; }
+  #root .hgo-stats-panel .daily-stats .stat-card:hover { transform: none; }
 }

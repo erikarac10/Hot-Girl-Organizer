@@ -1,44 +1,24 @@
-import { useEffect, useState } from "react";
-import type { PointerEvent as ReactPointerEvent, KeyboardEvent } from "react";
+import { useEffect, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { Heart } from "lucide-react";
 import "./MoodBoard.css";
 
-/* ========================================
-   TYPES
-======================================== */
-
-type Mood =
-  | "amazing"
-  | "good"
-  | "calm"
-  | "meh"
-  | "anxious"
-  | "rough";
-
+type Mood = "amazing" | "good" | "calm" | "meh" | "anxious" | "rough";
 type Energy = "low" | "medium" | "high";
 
 type MoodEntry = {
   mood?: Mood;
-  energy?: Energy;
+  energy?: Energy; // Kept for older saved entries.
   energyPercent?: number;
-  note?: string;
+  note?: string; // Preserve any historical notes.
 };
 
 type MoodHistory = Record<string, MoodEntry>;
+type MoodboardProps = { selectedDate: Date };
 
-type MoodboardProps = {
-  selectedDate: Date;
-};
+const STORAGE_KEY = "hot-girl-moodboard";
+const UPDATE_EVENT = "hgo-mood-updated";
 
-/* ========================================
-   MOOD OPTIONS
-======================================== */
-
-const moods: {
-  value: Mood;
-  label: string;
-  symbol: string;
-}[] = [
+const MOODS: ReadonlyArray<{ value: Mood; label: string; symbol: string }> = [
   { value: "amazing", label: "mogging", symbol: "✦" },
   { value: "good", label: "absolutely based", symbol: "♡" },
   { value: "calm", label: "unbothered queen", symbol: "🍃" },
@@ -47,277 +27,202 @@ const moods: {
   { value: "rough", label: "cooked", symbol: "☁" }
 ];
 
-/* ========================================
-   STORAGE
-======================================== */
+const SPARKLES = ["✦", "✧", "✦", "·", "✧", "✦", "·"];
+const SPARKLE_THRESHOLDS = [0, 0, 12, 27, 42, 58, 73];
+const LEGACY_ENERGY: Record<Energy, number> = { low: 20, medium: 50, high: 80 };
 
-function dateKey(date: Date) {
-  return [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, "0"),
-    String(date.getDate()).padStart(2, "0")
-  ].join("-");
+function dateKey(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
 function loadMoods(): MoodHistory {
   try {
-    const saved = JSON.parse(
-      localStorage.getItem("hot-girl-moodboard") || "{}"
-    );
+    const saved: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}");
+    if (!saved || typeof saved !== "object" || Array.isArray(saved)) return {};
 
-    return saved && typeof saved === "object" && !Array.isArray(saved)
-      ? saved
-      : {};
+    // Ignore malformed entries without discarding other days' history.
+    return Object.fromEntries(
+      Object.entries(saved).filter(([, entry]) =>
+        entry !== null && typeof entry === "object" && !Array.isArray(entry)
+      )
+    ) as MoodHistory;
   } catch {
     return {};
   }
 }
 
-/* ========================================
-   BATTERY HELPERS
-======================================== */
-
-function clamp(value: number) {
+function clampPercent(value: number): number {
   return Math.max(0, Math.min(100, Math.round(value)));
 }
 
-function getBatteryPercent(entry: MoodEntry): number | null {
-  if (typeof entry.energyPercent === "number") {
-    return clamp(entry.energyPercent);
+function batteryPercent(entry: MoodEntry): number | null {
+  if (typeof entry.energyPercent === "number" && Number.isFinite(entry.energyPercent)) {
+    return clampPercent(entry.energyPercent);
   }
-
-  // Convert previously saved energy levels
-  switch (entry.energy) {
-    case "low":
-      return 20;
-    case "medium":
-      return 50;
-    case "high":
-      return 80;
-    default:
-      return null;
-  }
+  return entry.energy && entry.energy in LEGACY_ENERGY
+    ? LEGACY_ENERGY[entry.energy]
+    : null;
 }
 
-function getEnergyLevel(percent: number): Energy {
-  if (percent < 34) return "low";
-  if (percent < 67) return "medium";
-  return "high";
+function energyLevel(percent: number): Energy {
+  return percent < 34 ? "low" : percent < 67 ? "medium" : "high";
 }
 
-function getEnergyLabel(percent: number) {
-  if (percent < 34) return "Cooked";
-  if (percent < 67) return "6-7";
-  return "Unstoppable";
-}
-
-/* ========================================
-   COMPONENT
-======================================== */
-
-function Moodboard({ selectedDate }: MoodboardProps) {
+export default function Moodboard({ selectedDate }: MoodboardProps) {
   const [entries, setEntries] = useState<MoodHistory>(loadMoods);
-
   const selectedKey = dateKey(selectedDate);
   const entry = entries[selectedKey] ?? {};
+  const currentBattery = entry.mood ? batteryPercent(entry) : null;
+  const energy = currentBattery ?? 0;
 
-  const batteryPercent = getBatteryPercent(entry);
-
-  /* Save automatically */
+  // Storage events and imports update state without echoing data back to storage.
+  function commitEntries(next: MoodHistory): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    } catch {
+      // Keep mood editing usable during the current session.
+    }
+    setEntries(next);
+    window.dispatchEvent(new Event(UPDATE_EVENT));
+  }
 
   useEffect(() => {
-    localStorage.setItem(
-      "hot-girl-moodboard",
-      JSON.stringify(entries)
-    );
-
-    window.dispatchEvent(new Event("hgo-mood-updated"));
-  }, [entries]);
-
-  /* Update selected date's entry */
-
-  function updateEntry(changes: Partial<MoodEntry>) {
-    setEntries(previous => ({
-      ...previous,
-      [selectedKey]: {
-        ...previous[selectedKey],
-        ...changes
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === STORAGE_KEY || event.key === null) {
+        setEntries(loadMoods());
       }
-    }));
-  }
-
-  /* Select or deselect mood */
+    };
+    const restore = () => setEntries(loadMoods());
+    window.addEventListener("storage", onStorage);
+    window.addEventListener("hgo-data-restored", restore);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("hgo-data-restored", restore);
+    };
+  }, []);
 
   function selectMood(mood: Mood) {
-    updateEntry({
-      mood: entry.mood === mood ? undefined : mood
+    const current = entries[selectedKey] ?? {};
+    commitEntries({
+      ...entries,
+      [selectedKey]: current.mood === mood
+        ? { ...current, mood: undefined, energy: undefined, energyPercent: undefined }
+        : { ...current, mood }
     });
   }
-
-  /* Set battery percentage */
 
   function setBatteryLevel(percent: number) {
-    const value = clamp(percent);
-
-    updateEntry({
-      energyPercent: value,
-      energy: getEnergyLevel(value)
+    const value = clampPercent(percent);
+    const current = entries[selectedKey] ?? {};
+    if (!current.mood || batteryPercent(current) === value) return;
+    commitEntries({
+      ...entries,
+      [selectedKey]: { ...current, energyPercent: value, energy: energyLevel(value) }
     });
   }
 
-  /* ========================================
-     VERTICAL BATTERY DRAGGING
-  ======================================== */
-
-  function updateBatteryFromPointer(
-    event: ReactPointerEvent<HTMLDivElement>
-  ) {
-    const rect = event.currentTarget.getBoundingClientRect();
-
-    // Bottom = 0%, top = 100%
-    const position = rect.bottom - event.clientY;
-
-    const percent = clamp(
-      (position / rect.height) * 100
-    );
-
-    setBatteryLevel(percent);
+  function updateFromPointer(event: PointerEvent<HTMLDivElement>) {
+    if (!entry.mood) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    if (!bounds.height) return;
+    setBatteryLevel(((bounds.bottom - event.clientY) / bounds.height) * 100);
   }
 
-  function handlePointerDown(
-    event: ReactPointerEvent<HTMLDivElement>
-  ) {
+  function onPointerDown(event: PointerEvent<HTMLDivElement>) {
+    if (!entry.mood) return;
     event.currentTarget.setPointerCapture(event.pointerId);
-    updateBatteryFromPointer(event);
+    updateFromPointer(event);
   }
 
-  function handlePointerMove(
-    event: ReactPointerEvent<HTMLDivElement>
-  ) {
+  function onPointerMove(event: PointerEvent<HTMLDivElement>) {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      updateBatteryFromPointer(event);
+      updateFromPointer(event);
     }
   }
 
-  /* Keyboard accessibility */
+  function onBatteryKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (!entry.mood) return;
+    const steps: Record<string, number> = {
+      ArrowUp: 5,
+      ArrowRight: 5,
+      ArrowDown: -5,
+      ArrowLeft: -5
+    };
 
-  function handleBatteryKeyDown(
-    event: KeyboardEvent<HTMLDivElement>
-  ) {
-    const current = batteryPercent ?? 0;
-
-    switch (event.key) {
-      case "ArrowUp":
-      case "ArrowRight":
-        event.preventDefault();
-        setBatteryLevel(current + 5);
-        break;
-
-      case "ArrowDown":
-      case "ArrowLeft":
-        event.preventDefault();
-        setBatteryLevel(current - 5);
-        break;
-
-      case "Home":
-        event.preventDefault();
-        setBatteryLevel(0);
-        break;
-
-      case "End":
-        event.preventDefault();
-        setBatteryLevel(100);
-        break;
+    if (event.key in steps) {
+      event.preventDefault();
+      setBatteryLevel(energy + steps[event.key]);
+    } else if (event.key === "Home" || event.key === "End") {
+      event.preventDefault();
+      setBatteryLevel(event.key === "Home" ? 0 : 100);
     }
   }
-
-  /* ========================================
-     RENDER
-  ======================================== */
 
   return (
     <section className="moodboard">
-
-      {/* Header */}
-
       <div className="moodboard-header">
         <div>
-          <h2>
-            Vibe Check <span>♡</span>
-          </h2>
-
-          <p className="moodboard-description">
-            fr how we doin
-          </p>
+          <h2>Vibe Check <span>♡</span></h2>
+          <p className="moodboard-description">fr how we doin</p>
         </div>
-
-        <div className="moodboard-icon">
+        <div className="moodboard-icon" aria-hidden="true">
           <Heart size={18} />
         </div>
       </div>
 
-      {/* Six mood options */}
-
-      <div className="moodboard-moods">
-        {moods.map(mood => (
+      <div className="moodboard-moods" aria-label="Mood for selected date">
+        {MOODS.map(({ value, label, symbol }) => (
           <button
             type="button"
-            key={mood.value}
-            className={`moodboard-mood mood-${mood.value} ${entry.mood === mood.value ? "selected" : ""
-              }`}
-            onClick={() => selectMood(mood.value)}
-            aria-pressed={entry.mood === mood.value}
+            key={value}
+            className={`moodboard-mood mood-${value}${entry.mood === value ? " selected" : ""}`}
+            aria-pressed={entry.mood === value}
+            onClick={() => selectMood(value)}
           >
-            <span className="moodboard-mood-symbol">
-              {mood.symbol}
-            </span>
-
-            <span className="moodboard-mood-label">
-              {mood.label}
-            </span>
+            <span className="moodboard-mood-symbol" aria-hidden="true">{symbol}</span>
+            <span className="moodboard-mood-label">{label}</span>
           </button>
         ))}
       </div>
 
-      {/* Vertical battery */}
-
-      {/* Vertical battery */}
-
       <div className="moodboard-battery-section">
+        <div className="battery-sparkles" aria-hidden="true">
+          {SPARKLES.map((symbol, index) => {
+            const opacity = index < 2
+              ? 0.35 + energy * 0.0055
+              : Math.min(0.9, Math.max(0, (energy - SPARKLE_THRESHOLDS[index]) / 25) * 0.9);
+
+            return (
+              <span key={index} className="battery-sparkle" style={{ opacity }}>
+                {symbol}
+              </span>
+            );
+          })}
+        </div>
+
         <div className="moodboard-battery-area">
-
           <div className="moodboard-battery">
-
-            <div className="battery-terminal" />
-
+            <div className="battery-terminal" aria-hidden="true" />
             <div
               className="battery-body"
               role="slider"
-              tabIndex={0}
+              tabIndex={entry.mood ? 0 : -1}
               aria-label="Energy level"
               aria-valuemin={0}
               aria-valuemax={100}
-              aria-valuenow={batteryPercent ?? 0}
+              aria-valuenow={energy}
+              aria-valuetext={entry.mood ? `${energy}% energy` : "Select a mood first"}
               aria-orientation="vertical"
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onKeyDown={handleBatteryKeyDown}
+              aria-disabled={!entry.mood}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onKeyDown={onBatteryKeyDown}
             >
-              <div
-                className="battery-fill"
-                style={{
-                  height: `${batteryPercent ?? 0}%`
-                }}
-              />
+              <div className="battery-fill" style={{ height: `${energy}%` }} aria-hidden="true" />
             </div>
-
           </div>
-
         </div>
       </div>
-
     </section>
   );
 }
-
-export default Moodboard;
