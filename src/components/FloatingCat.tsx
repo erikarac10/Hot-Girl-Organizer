@@ -5,7 +5,7 @@ import "./FloatingCat.css";
 /** Interactive empty-search mascot for the "When did I last...?" card. */
 export default function FloatingCat() {
   const [isPetted, setIsPetted] = useState(false);
-  const [petCount, setPetCount] = useState(0);
+  const [, setPetCount] = useState(0);
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {

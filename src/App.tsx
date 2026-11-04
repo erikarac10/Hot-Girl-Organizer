@@ -8,7 +8,7 @@ import DailyRoutines from "./components/DailyRoutines";
 import LastDone from "./components/LastDone";
 import Reminders from "./components/Reminders";
 import Celebrations from "./components/Celebrations";
-import DataBackup from "./backup/DataBackup";
+//import DataBackup from "./backup/DataBackup";
 
 export default function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());

@@ -33,7 +33,7 @@ type Screen = "pick" | "log" | "activity";
 type LogDraft = {
   activity: Activity | null;
   editingId: string | null;
-  date: string;
+  name: string;
   minutes: string;
   note: string;
 };
@@ -43,6 +43,7 @@ type ActivityDraft = {
   emoji: string;
   category: string;
   minutes: string;
+  note: string;
 };
 
 const MOMENTS_KEY = "hot-girl-moments";
@@ -56,21 +57,34 @@ const starterActivities: Activity[] = [
   { id: "avery-play", name: "Played with Avery", emoji: "🦴", category: "Avery" },
   { id: "avery-brush", name: "Combed Avery", emoji: "🪮", category: "Avery" },
   { id: "avery-teeth", name: "Brushed Avery’s teeth", emoji: "🪥", category: "Avery" },
-  { id: "avery-nails", name: "Trimmed Avery’s nails", emoji: "🐾", category: "Avery" },
+  { id: "avery-nails", name: "Cut Avery's Nails", emoji: "💅", category: "Avery" },
   { id: "jog", name: "Went for a jog", emoji: "🏃", category: "Movement", defaultMinutes: 20 },
   { id: "workout", name: "Worked out", emoji: "💪", category: "Movement" },
   { id: "stretch", name: "Stretched", emoji: "🧘", category: "Movement" },
   { id: "walk", name: "Went for a walk", emoji: "🚶", category: "Movement" },
-  { id: "dishes", name: "Washed the dishes", emoji: "🫧", category: "Home" },
+  { id: "dishes", name: "Washed dishes", emoji: "🫧", category: "Home" },
   { id: "dishwasher", name: "Loaded the dishwasher", emoji: "🍽️", category: "Home" },
   { id: "put-dishes-away", name: "Put dishes away", emoji: "🍽️", category: "Home" },
   { id: "vacuum-home", name: "Vacuumed the apartment", emoji: "🧹", category: "Home" },
   { id: "vacuum-couch", name: "Vacuumed the couch", emoji: "🛋️", category: "Home" },
-  { id: "dust", name: "Dusted", emoji: "✨", category: "Home" },
+  { id: "dust", name: "Dusted", emoji: "🪶", category: "Home" },
   { id: "made-bed", name: "Made the bed", emoji: "🛏️", category: "Home" },
   { id: "tidied", name: "Tidied up", emoji: "🧺", category: "Home" },
   { id: "organized", name: "Organized something", emoji: "🎀", category: "Home" },
   { id: "put-away", name: "Put things away", emoji: "🧺", category: "Home" },
+  { id: "garbage", name: "Took out the garbage", emoji: "🗑️", category: "Home" },
+  { id: "recycling", name: "Took out the recycling", emoji: "♻️", category: "Home" },
+  { id: "clean-bathtub", name: "Cleaned the bathtub", emoji: "🛁", category: "Home" },
+  { id: "clean-toilet", name: "Cleaned the toilet", emoji: "🚽", category: "Home" },
+  { id: "clean-bathroom-sink", name: "Cleaned the bathroom sink", emoji: "🧽", category: "Home" },
+  { id: "clean-mirrors", name: "Cleaned mirrors", emoji: "🪞", category: "Home" },
+  { id: "clothes-laundry", name: "Clothes Laundry", emoji: "👚", category: "Home" },
+  { id: "bedsheets-laundry", name: "Bedsheets Laundry", emoji: "🛏️", category: "Home" },
+  { id: "couch-blankets", name: "Washed couch blankets", emoji: "🧸", category: "Home" },
+  { id: "bathroom-towels", name: "Washed bathroom towels", emoji: "🧼", category: "Home" },
+  { id: "mop-floor", name: "Mopped floor", emoji: "🪣", category: "Home" },
+  { id: "sanitize-surfaces", name: "Sanitized Surfaces", emoji: "🧴", category: "Home" },
+  { id: "clean-computer", name: "Cleaned computer", emoji: "🖥️", category: "Home" },
   { id: "shower", name: "Took a shower", emoji: "🛁", category: "Self-care" },
   { id: "hair", name: "Washed my hair", emoji: "🫧", category: "Self-care" },
   { id: "skin", name: "Did skincare", emoji: "🧴", category: "Self-care" },
@@ -123,7 +137,39 @@ function isMoment(value: unknown): value is Moment {
 }
 
 function readMoments() { return loadArray(MOMENTS_KEY, [], isMoment); }
-function readActivities() { return loadArray(ACTIVITIES_KEY, starterActivities, isActivity); }
+
+/** Merge new built-ins into existing libraries without erasing custom activities or history. */
+function readActivities(): Activity[] {
+  const saved = loadArray(ACTIVITIES_KEY, [], isActivity);
+  if (!saved.length) return starterActivities;
+
+  const byId = new Map(starterActivities.map(activity => [activity.id, activity]));
+  const updated = saved.map(activity => {
+    if (activity.custom) return activity;
+    const current = byId.get(activity.id);
+    if (!current) return activity;
+    // Only migrate recognizable old built-in labels; never overwrite user edits.
+    if (activity.id === "dishes" && activity.name === "Washed the dishes") {
+      return { ...activity, name: current.name };
+    }
+    if (activity.id === "avery-nails" && activity.name === "Trimmed Avery’s nails") {
+      return { ...activity, name: current.name, emoji: current.emoji };
+    }
+    if (activity.id === "dust" && activity.name === "Dusted" && activity.emoji === "✨") {
+      return { ...activity, emoji: current.emoji };
+    }
+    return activity;
+  });
+
+  const ids = new Set(updated.map(activity => activity.id));
+  const names = new Set(updated.map(activity => activity.name.trim().toLocaleLowerCase()));
+  for (const activity of starterActivities) {
+    if (!ids.has(activity.id) && !names.has(activity.name.toLocaleLowerCase())) {
+      updated.push(activity);
+    }
+  }
+  return updated;
+}
 
 function saveArray<T>(key: string, data: T[]) {
   try { localStorage.setItem(key, JSON.stringify(data)); } catch { /* In-memory editing still works. */ }
@@ -136,15 +182,15 @@ function validMinutes(input: string): number | undefined | null {
   return Number.isFinite(number) && number >= 0 ? number : null;
 }
 
-export default function Activities({ selectedDate, onDateSelect }: Props) {
+export default function Activities({ selectedDate }: Props) {
   const [moments, setMoments] = useState<Moment[]>(readMoments);
   const [activities, setActivities] = useState<Activity[]>(readActivities);
   const [screen, setScreen] = useState<Screen | null>(null);
   const [search, setSearch] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<Moment | null>(null);
-  const [log, setLog] = useState<LogDraft>({ activity: null, editingId: null, date: "", minutes: "", note: "" });
+  const [log, setLog] = useState<LogDraft>({ activity: null, editingId: null, name: "", minutes: "", note: "" });
   const [activityDraft, setActivityDraft] = useState<ActivityDraft>({
-    editingId: null, name: "", emoji: "🌸", category: "Self-care", minutes: ""
+    editingId: null, name: "", emoji: "🌸", category: "Self-care", minutes: "", note: ""
   });
 
   const selectedKey = dateKey(selectedDate);
@@ -152,6 +198,16 @@ export default function Activities({ selectedDate, onDateSelect }: Props) {
   const filteredActivities = useMemo(() => activities.filter(activity =>
     activity.name.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase())
   ), [activities, search]);
+
+  // One-time library upgrade: make new built-ins available to other components and backups.
+  useEffect(() => {
+    const stored = loadArray(ACTIVITIES_KEY, [], isActivity);
+    const upgraded = readActivities();
+    if (JSON.stringify(stored) !== JSON.stringify(upgraded)) {
+      saveArray(ACTIVITIES_KEY, upgraded);
+      setActivities(upgraded);
+    }
+  }, []);
 
   // Persist only user changes. Storage/restore updates must never write back.
   function commitMoments(update: (previous: Moment[]) => Moment[]): Moment[] {
@@ -225,12 +281,12 @@ export default function Activities({ selectedDate, onDateSelect }: Props) {
 
   function openPicker() {
     setSearch("");
-    setLog({ activity: null, editingId: null, date: selectedKey, minutes: "", note: "" });
+    setLog({ activity: null, editingId: null, name: "", minutes: "", note: "" });
     setScreen("pick");
   }
 
   function chooseActivity(activity: Activity) {
-    setLog(previous => ({ ...previous, activity, minutes: String(activity.defaultMinutes ?? "") }));
+    setLog(previous => ({ ...previous, activity, name: activity.name, minutes: String(activity.defaultMinutes ?? "") }));
     setScreen("log");
   }
 
@@ -244,38 +300,41 @@ export default function Activities({ selectedDate, onDateSelect }: Props) {
         category: moment.category ?? "Other"
       },
       editingId: moment.id,
-      date: moment.date,
+      name: moment.text,
       minutes: String(moment.minutes ?? ""),
       note: moment.note ?? ""
     });
     setScreen("log");
   }
 
-  function saveMoment() {
-    if (!log.activity) return;
-    const date = fromDateKey(log.date);
-    const duration = validMinutes(log.minutes);
-    if (!date || duration === null) return;
+  /** New and custom activities share the same one-step logging flow. */
+  function recordMoment(activity: Activity, title: string, minutesInput: string, note: string, editingId: string | null = null) {
+    const name = title.trim();
+    const duration = validMinutes(minutesInput);
+    if (!name || duration === null) return;
 
-    const original = readMoments().find(moment => moment.id === log.editingId);
+    const original = readMoments().find(moment => moment.id === editingId);
     const moment: Moment = {
-      id: log.editingId ?? crypto.randomUUID(),
-      date: log.date,
-      text: log.activity.name,
-      emoji: log.activity.emoji,
-      activityId: log.activity.id,
-      category: log.activity.category,
+      id: editingId ?? crypto.randomUUID(),
+      date: original?.date ?? selectedKey,
+      text: name,
+      emoji: activity.emoji,
+      activityId: activity.id,
+      category: activity.category,
       minutes: duration && duration > 0 ? duration : undefined,
-      note: log.note.trim(),
+      note: note.trim(),
       source: original?.source
     };
-    const before = commitMoments(previous => log.editingId
-      ? previous.map(item => item.id === log.editingId ? moment : item)
+    const before = commitMoments(previous => editingId
+      ? previous.map(item => item.id === editingId ? moment : item)
       : [...previous, moment]
     );
     window.dispatchEvent(new CustomEvent("hgo-moment-saved", { detail: { moment, before } }));
-    onDateSelect(date);
     setScreen(null);
+  }
+
+  function saveMoment() {
+    if (log.activity) recordMoment(log.activity, log.name, log.minutes, log.note, log.editingId);
   }
 
   function openActivityEditor(activity?: Activity) {
@@ -284,7 +343,8 @@ export default function Activities({ selectedDate, onDateSelect }: Props) {
       name: activity?.name ?? "",
       emoji: activity?.emoji ?? "🌸",
       category: activity?.category ?? "Self-care",
-      minutes: String(activity?.defaultMinutes ?? "")
+      minutes: String(activity?.defaultMinutes ?? ""),
+      note: ""
     });
     setScreen("activity");
   }
@@ -304,8 +364,12 @@ export default function Activities({ selectedDate, onDateSelect }: Props) {
       ? previous.map(item => item.id === activity.id ? activity : item)
       : [...previous, activity]
     );
-    if (activityDraft.editingId) setScreen("pick");
-    else chooseActivity(activity);
+    if (activityDraft.editingId) {
+      setScreen("pick");
+    } else {
+      // Creating a new activity also logs it on the date already selected.
+      recordMoment(activity, activity.name, activityDraft.minutes, activityDraft.note);
+    }
   }
 
   function removeActivity(id: string) {
@@ -400,7 +464,7 @@ export default function Activities({ selectedDate, onDateSelect }: Props) {
             <div className="hgo-modal-heading">
               <h2 id="activities-editor-heading">
                 {screen === "activity"
-                  ? activityDraft.editingId ? "Edit saved activity" : "New Activity Just Dropped"
+                  ? activityDraft.editingId ? "Edit saved activity" : "Add Aura Gain"
                   : screen === "log" ? log.editingId ? "Edit Aura" : "Add Aura Gain" : "Add Aura Gain"}
                 <span> ✿</span>
               </h2>
@@ -444,27 +508,25 @@ export default function Activities({ selectedDate, onDateSelect }: Props) {
             {screen === "log" && log.activity && <>
               <div className="hgo-chosen">
                 <span>{log.activity.emoji}</span>
-                <strong>{log.activity.name}</strong>
-                <button type="button" onClick={() => setScreen("pick")}>Change</button>
+                <strong>{log.editingId ? "Edit logged activity" : log.activity.name}</strong>
+                {!log.editingId && <button type="button" onClick={() => setScreen("pick")}>Change</button>}
               </div>
-              <div className="hgo-fields">
-                <label>Date
-                  <input type="date" value={log.date}
-                    onChange={event => setLog(previous => ({ ...previous, date: event.target.value }))} />
-                </label>
-                <label>Minutes <small>(optional)</small>
-                  <input type="number" min="0" step="1" placeholder="e.g. 30" value={log.minutes}
-                    onChange={event => setLog(previous => ({ ...previous, minutes: event.target.value }))} />
-                </label>
-              </div>
+              
+              {log.editingId && <label className="hgo-label">Activity name
+                <input autoFocus value={log.name} onChange={event => setLog(previous => ({ ...previous, name: event.target.value }))} />
+              </label>}
+              <label className="hgo-label">Minutes <small>(optional)</small>
+                <input type="number" min="0" step="1" placeholder="e.g. 30" value={log.minutes}
+                  onChange={event => setLog(previous => ({ ...previous, minutes: event.target.value }))} />
+              </label>
               <label className="hgo-label">Note <small>(optional)</small>
                 <textarea rows={4} placeholder="Closing TED Talk" value={log.note}
                   onChange={event => setLog(previous => ({ ...previous, note: event.target.value }))} />
               </label>
               <div className="hgo-modal-actions">
                 <button type="button" onClick={() => setScreen(null)}>Cancel</button>
-                <button type="button" className="hgo-primary" disabled={!fromDateKey(log.date) || logMinutes === null} onClick={saveMoment}>
-                  <Check size={16} /> Save
+                <button type="button" className="hgo-primary" disabled={!log.name.trim() || logMinutes === null} onClick={saveMoment}>
+                  <Check size={16} /> Slay & Save
                 </button>
               </div>
             </>}
@@ -486,14 +548,18 @@ export default function Activities({ selectedDate, onDateSelect }: Props) {
                   </select>
                 </label>
               </div>
-              <label className="hgo-label">Usual minutes <small>(optional)</small>
+              <label className="hgo-label">{activityDraft.editingId ? "Usual minutes" : "Minutes"} <small>(optional)</small>
                 <input type="number" min="0" step="1" placeholder="e.g. 20" value={activityDraft.minutes}
                   onChange={event => setActivityDraft(previous => ({ ...previous, minutes: event.target.value }))} />
               </label>
+              {!activityDraft.editingId && <label className="hgo-label">Note <small>(optional)</small>
+                <textarea rows={4} placeholder="Closing TED Talk" value={activityDraft.note}
+                  onChange={event => setActivityDraft(previous => ({ ...previous, note: event.target.value }))} />
+              </label>}
               <div className="hgo-modal-actions">
-                <button type="button" onClick={() => setScreen("pick")}><ArrowLeft size={15} /> Back</button>
+                <button type="button" onClick={() => setScreen("pick")}><ArrowLeft size={15} /></button>
                 <button type="button" className="hgo-primary" disabled={!activityDraft.name.trim() || activityMinutes === null} onClick={saveActivity}>
-                  <Check size={16} /> Save activity
+                  <Check size={16} /> {activityDraft.editingId ? "Save activity" : "Slay & Save"}
                 </button>
               </div>
             </>}

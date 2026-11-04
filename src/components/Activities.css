@@ -398,3 +398,11 @@
   .activities-delete-modal, .activities-delete-ghost { animation: none; }
   .activities-delete-actions button { transition: none; }
 }
+
+/* Display the already-selected dashboard date without asking for it again. */
+.hgo-log-date {
+  margin: -4px 0 17px;
+  color: #a9849a;
+  font-size: 11px;
+  font-weight: 700;
+}
