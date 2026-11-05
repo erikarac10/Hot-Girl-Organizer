@@ -102,7 +102,15 @@ function DailyStats({ selectedDate }: DailyStatsProps) {
         case "Fun": result.fun += 1; break;
       }
 
-      if (category === "Movement" || (category === "Avery" && /walk/i.test(moment.text))) {
+      if (
+        category === "Movement" ||
+        (
+          category === "Avery" &&
+          ["avery-pee", "avery-evening", "avery-walk", "avery-play"].includes(
+            moment.activityId ?? ""
+          )
+        )
+      ) {
         const minutes = moment.minutes;
         if (typeof minutes === "number" && Number.isFinite(minutes) && minutes > 0) {
           result.minutes += minutes;
